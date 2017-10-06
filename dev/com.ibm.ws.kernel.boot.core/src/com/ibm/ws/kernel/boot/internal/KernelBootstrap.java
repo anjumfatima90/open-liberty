@@ -44,6 +44,7 @@ import com.ibm.ws.kernel.productinfo.ProductInfoReplaceException;
 import com.ibm.ws.kernel.provisioning.NameBasedLocalBundleRepository;
 import com.ibm.ws.kernel.provisioning.ServiceFingerprint;
 import com.ibm.ws.kernel.provisioning.VersionUtility;
+import com.ibm.ws.staticvalue.StaticValue;
 
 /**
  * Bootstrap the runtime: Resolve the few jar files required to construct the nested
@@ -76,6 +77,9 @@ public class KernelBootstrap {
     public KernelBootstrap(BootstrapConfig bootProps) {
         this.bootProps = bootProps;
         libertyBoot = Boolean.parseBoolean(bootProps.get(BootstrapConstants.LIBERTY_BOOT_PROPERTY));
+        if (libertyBoot) {
+            StaticValue.setMultiplex();
+        }
 
         // Use initialized bootstrap configuration to create the server lock.
         // This ensures the server and nested workarea directory exist and are writable
