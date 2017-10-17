@@ -13,10 +13,12 @@ package com.ibm.ws.tcpchannel.internal;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.Callable;
 
 import com.ibm.websphere.channelfw.ChannelData;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.staticvalue.StaticValue;
 import com.ibm.wsspi.channelfw.exception.ChannelException;
 
 /**
@@ -24,7 +26,14 @@ import com.ibm.wsspi.channelfw.exception.ChannelException;
  */
 public class NioTCPChannel extends TCPChannel {
 
-    private static WorkQueueManager workQueueManager = null;
+    // create WorkQueueMgr if this is the first NonBlocking Channel that
+    // is being created.
+    private static StaticValue<WorkQueueManager> workQueueManager = StaticValue.createStaticValue(new Callable<WorkQueueManager>() {
+        @Override
+        public WorkQueueManager call() {
+            return new WorkQueueManager();
+        }
+    });
 
     private static final TraceComponent tc = Tr.register(NioTCPChannel.class, TCPChannelMessageConstants.TCP_TRACE_NAME, TCPChannelMessageConstants.TCP_BUNDLE);
 
@@ -42,18 +51,12 @@ public class NioTCPChannel extends TCPChannel {
         }
 
         super.setup(runtimeConfig, tcpConfig, factory);
-        // create WorkQueueMgr if this is the first NonBlocking Channel that
-        // is being created.
-
-        if (workQueueManager == null) {
-            workQueueManager = new WorkQueueManager();
-        }
 
         if (!config.isInbound()) {
-            connectionManager = new ConnectionManager(this, workQueueManager);
+            connectionManager = new ConnectionManager(this, workQueueManager.get());
         }
 
-        workQueueManager.startSelectors(config.isInbound());
+        workQueueManager.get().startSelectors(config.isInbound());
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "setup");
@@ -63,11 +66,11 @@ public class NioTCPChannel extends TCPChannel {
 
     /**
      * Returns the WorkQueueManager reference.
-     * 
+     *
      * @return WorkQueueManager
      */
     protected WorkQueueManager getWorkQueueManager() {
-        return workQueueManager;
+        return workQueueManager.get();
     }
 
     // LIDB3618-2 add method
