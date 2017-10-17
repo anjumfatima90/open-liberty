@@ -32,6 +32,21 @@ public abstract class StaticValue<T> {
         }
     }
 
+    public static <T> StaticValue<T> mutateStaticValue(StaticValue<T> staticValue, Callable<T> initializer) {
+    	if (multiplex.get()) {
+    		// Multiplexing case; must check for existing StaticValue
+    		if (staticValue == null) {
+    			// no existing value; create new one with no constructor initializer
+    			staticValue = StaticValue.createStaticValue(null);
+    		}
+    		// initialize this thread only with the initializer
+    		staticValue.computeIfAbsent(initializer);
+    		return staticValue;
+    	}
+    	// Final singleton case; just create a new StaticValue
+    	return StaticValue.createStaticValue(initializer);
+    }
+
     public static void setMultiplex() {
         multiplex.set(true);
     }
@@ -93,11 +108,6 @@ public abstract class StaticValue<T> {
                     singleton = null;
                 }
             }
-        }
-
-        @Override
-        public boolean isMultiplex() {
-            return true;
         }
 
         private T getOrInitSingleton(Callable<T> initializer) {
@@ -174,11 +184,6 @@ public abstract class StaticValue<T> {
         public T get() {
             return singleton;
         }
-
-        @Override
-        public boolean isMultiplex() {
-            return false;
-        }
     }
 
     static ThreadGroup getThreadGroup() {
@@ -194,6 +199,4 @@ public abstract class StaticValue<T> {
     public abstract T computeIfAbsent(Callable<T> initializer);
 
     public abstract T get();
-
-    public abstract boolean isMultiplex();
 }
