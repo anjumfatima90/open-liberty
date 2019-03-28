@@ -1,4 +1,4 @@
--include= ~../ant_build/resources/bnd/bundle.props
+-include= ~../cnf/resources/bnd/bundle.props
 bVersion=1.0
 
 src: \
@@ -11,12 +11,11 @@ test.project: true
 -buildpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \
 	com.ibm.ws.junit.extensions;version=latest, \
-	../build.sharedResources/lib/hamcrest-all.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock-junit4.jar;version=file, \
-	../build.sharedResources/lib/jmock/old/jmock.jar;version=file, \
+	org.hamcrest:hamcrest-all;version=;version=latest, \
+	org.jmock:jmock-junit4;strategy=exact;version=2.5.1, \
+	org.jmock:jmock;strategy=exact;version=2.5.1, \
 	fattest.simplicity;version=latest, \
-	../fattest.simplicity/lib/public.api.jar;version=file, \
-	../com.ibm.ws.kernel.boot.archive/lib/org.apache.commons.compress-1.10.jar;version=file, \
+	org.apache.commons:commons-compress;version=latest, \
 	com.ibm.websphere.org.osgi.core;version=latest, \
 	com.ibm.websphere.org.osgi.service.cm;version=latest,\
 	com.ibm.websphere.org.osgi.service.component;version=latest,\
