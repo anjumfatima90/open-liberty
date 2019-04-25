@@ -30,6 +30,7 @@ import componenttest.annotation.ExpectedFFDC;
 import componenttest.custom.junit.runner.FATRunner;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
+import com.ibm.ws.kernel.feature.fat.TestUtils;
 
 /**
  *
@@ -54,8 +55,6 @@ public class FeatureConflictUpgradeTest {
 
     private static final String FEATURE_AUTO_A10_B10_1_0 = "auto-A10B10-1.0";
     private static final String FEATURE_AUTO_A11_B11_1_0 = "auto-A11B11-1.0";
-
-    private static final String FEATURE_CACHE = "workarea/platform/feature.cache";
 
     @BeforeClass
     public static void beforeClass() throws Exception {
@@ -131,7 +130,7 @@ public class FeatureConflictUpgradeTest {
 
         assertNotNull("No message indicating a conflict", server.waitForStringInLog("CWWKF0033E.*" + FEATURE_CAPABILITYA_1_0));
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
         assertFalse("Expected capabilityA-1.1 feature not to be installed, but it was", installedFeatures.contains(FEATURE_CAPABILITYA_1_1));
         assertFalse("Expected capabilityA-1.0 feature not to be installed, but it was", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
 
@@ -155,7 +154,8 @@ public class FeatureConflictUpgradeTest {
 
         //assertNotNull("No message indicating that the lower version feature was not used", server.waitForStringInLog("CWWKF0031I.*" + FEATURE_CAPABILITYB_1_0));
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
+
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_1));
         assertFalse("Expected capabilityB-1.0 feature not to be installed, but it was", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -178,7 +178,8 @@ public class FeatureConflictUpgradeTest {
         server.setServerConfigurationFile("server_a10combo10.xml");
         server.startServer(m + ".log");
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Pre-condition: Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Pre-condition: Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -192,7 +193,7 @@ public class FeatureConflictUpgradeTest {
         assertNotNull("Expected message indicating that capabilityB-1.1 feature was installed did not occur", server.waitForStringInLog("CWWKF0012I.*capabilityB-1.1"));
         assertNotNull("Expected message indicating that capabilityB-1.0 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityB-1.0"));
 
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_1));
@@ -219,7 +220,7 @@ public class FeatureConflictUpgradeTest {
 
         // assertNotNull("No message indicating that the lower version feature was not used", server.waitForStringInLog("CWWKF0031I.*" + FEATURE_CAPABILITYB_1_0));
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Pre-condition: Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Pre-condition: Expected capabilityB-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_1));
@@ -232,7 +233,7 @@ public class FeatureConflictUpgradeTest {
         assertNotNull("Expected message indicating that capabilityB-1.0 feature was installed did not occur", server.waitForStringInLog("CWWKF0012I.*capabilityB-1.0"));
         assertNotNull("Expected message indicating that capabilityB-1.1 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityB-1.1"));
 
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -260,7 +261,8 @@ public class FeatureConflictUpgradeTest {
 
         // server.xml specifies capabilityA-1.0 and capabilityB-1.0, so
         // we expect auto feature auto-A10B10 to be installed
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Pre-condition: Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Pre-condition: Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -280,7 +282,8 @@ public class FeatureConflictUpgradeTest {
         // capabilityB-1.0, and capabilityB-1.1 -- the server should not install capabilityB-1.0
         // since capabilityB-1.1 is the upgrade -- that means that auto feature auto-A10B10 should
         // be uninstalled.
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_1));
@@ -304,7 +307,8 @@ public class FeatureConflictUpgradeTest {
         // No we've upgraded capabilityA-1.0 to 1.1- so we have A1.0, A1.1, B1.0, and B1.1 specified, and
         // the server should remove A1.0 and B1.0 since the are upgraded by A1.1 and B1.1 respectively.
         // This means that we should see auto feature, auto-A11B11 installed.
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_1));
         assertTrue("Expected capabilityB-1.1 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_1));
@@ -333,7 +337,7 @@ public class FeatureConflictUpgradeTest {
 
         assertNotNull("No message indicating a conflict", server.waitForStringInLog("CWWKF0033E.*" + FEATURE_CAPABILITYA_1_0));
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
         assertTrue("Expected comboA10B10-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_COMBO_A10_B10_1_0));
         assertTrue("Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
         assertTrue("Expected capabilityC-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYC_1_0));
@@ -348,7 +352,8 @@ public class FeatureConflictUpgradeTest {
         assertNotNull("Expected message indicating that capabilityC-1.0 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityC-1.0"));
         assertNotNull("Expected message indicating that capabilityD-1.0 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityD-1.0"));
 
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -374,7 +379,8 @@ public class FeatureConflictUpgradeTest {
         server.setServerConfigurationFile("server_d10a10b10combo10.xml");
         server.startServer(m + ".log");
 
-        String installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        String installedFeatures = TestUtils.getInstalledFeatures(server);
+
         assertTrue("Expected comboA10B10-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_COMBO_A10_B10_1_0));
         assertTrue("Expected capabilityA-2.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_2_0));
         assertTrue("Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
@@ -389,7 +395,8 @@ public class FeatureConflictUpgradeTest {
         assertNotNull("Expected message indicating that capabilityC-1.0 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityC-1.0"));
         assertNotNull("Expected message indicating that capabilityD-1.0 feature was uninstalled did not occur", server.waitForStringInLog("CWWKF0013I.*capabilityD-1.0"));
 
-        installedFeatures = TestUtils.getInstalledFeatures(server, FEATURE_CACHE);
+        installedFeatures = TestUtils.getInstalledFeatures(server);
+
         Log.info(c, m, "installedFeatures: " + installedFeatures);
         assertTrue("Expected capabilityA-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYA_1_0));
         assertTrue("Expected capabilityB-1.0 feature to be installed but was not", installedFeatures.contains(FEATURE_CAPABILITYB_1_0));
