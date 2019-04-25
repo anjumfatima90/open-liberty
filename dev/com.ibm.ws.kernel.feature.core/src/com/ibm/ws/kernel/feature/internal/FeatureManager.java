@@ -893,6 +893,11 @@ public class FeatureManager implements FeatureProvisioner, FrameworkReady, Manag
                 Tr.audit(tc, "FEATURES_REMOVED", publicFeatures);
             }
         }
+
+        postInstalledFeatures.removeAll(preInstalledFeatures);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "remaining features", postInstalledFeatures);
+        }
     }
 
     /**
