@@ -9,7 +9,7 @@ IBM-Process-Types: server, \
 Subsystem-Name: Secure Socket Layer 1.0
 -features=com.ibm.websphere.appserver.channelfw-1.0
 -bundles=com.ibm.ws.ssl, \
- com.ibm.ws.channel.ssl, \
+ com.ibm.ws.channel.ssl; start-phase:=CONTAINER_LATE, \
  com.ibm.websphere.security, \
  com.ibm.ws.crypto.certificateutil
 -jars=com.ibm.websphere.appserver.spi.ssl; location:=dev/spi/ibm/, \
