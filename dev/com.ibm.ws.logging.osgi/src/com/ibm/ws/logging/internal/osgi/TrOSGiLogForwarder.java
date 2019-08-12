@@ -55,6 +55,7 @@ public class TrOSGiLogForwarder implements SynchronousLogListener, SynchronousBu
 	private static final String COULD_NOT_OBTAIN_ALL_REQ_DEPS = "could not obtain all required dependencies";
 	private static final String SERVICE_NOT_AVAILABLE = "service not available from service registry for servicereference";
 	private static final String CANNOT_BE_CALLED_ON_NULL_OBJECT = "cannot be called on null object";
+	private static final String CIRCULAR_REFERENCE_DETECTED = "Circular reference detected trying to get service";
 
     private final Map<Bundle, OSGiTraceComponent> traceComponents = new ConcurrentHashMap<Bundle, OSGiTraceComponent>();
 
@@ -253,7 +254,8 @@ public class TrOSGiLogForwarder implements SynchronousLogListener, SynchronousBu
         if(message.contains(COULD_NOT_GET_SERVICE_FROM_REF) ||
                 message.contains(COULD_NOT_OBTAIN_ALL_REQ_DEPS) ||
                 message.contains(SERVICE_NOT_AVAILABLE) ||
-                message.contains(CANNOT_BE_CALLED_ON_NULL_OBJECT)) {
+                message.contains(CANNOT_BE_CALLED_ON_NULL_OBJECT) ||
+                message.contains(CIRCULAR_REFERENCE_DETECTED)) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "This is not an error, but may indicate high system load - " + logEntry.getMessage(),
                         getObjects(logEntry, false));
