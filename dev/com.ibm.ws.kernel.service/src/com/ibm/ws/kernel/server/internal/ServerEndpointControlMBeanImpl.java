@@ -47,11 +47,21 @@ public class ServerEndpointControlMBeanImpl extends StandardMBean implements Ser
      * inject the service that will allow pause and resume control of endpoints
      *
      */
+    private PauseableComponentController pauseableComponentController;
+
     @Reference(service = PauseableComponentController.class,
                cardinality = ReferenceCardinality.MANDATORY,
                policy = ReferencePolicy.STATIC,
                policyOption = ReferencePolicyOption.GREEDY)
-    private PauseableComponentController pauseableComponentController;
+    protected void setPauseableComponentController(PauseableComponentController pauseableComponentController) {
+        this.pauseableComponentController = pauseableComponentController;
+    }
+
+    protected void unsetPauseableComponentController(PauseableComponentController pauseableComponentController) {
+        if (pauseableComponentController == this.pauseableComponentController) {
+            this.pauseableComponentController = null;
+        }
+    }
 
     public ServerEndpointControlMBeanImpl() throws NotCompliantMBeanException {
         super(ServerEndpointControlMBean.class);

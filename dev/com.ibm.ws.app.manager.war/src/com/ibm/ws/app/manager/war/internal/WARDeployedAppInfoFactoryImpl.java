@@ -38,12 +38,44 @@ public class WARDeployedAppInfoFactoryImpl extends AbstractDeployedAppInfoFactor
 
     private static final TraceComponent tc = Tr.register(WARDeployedAppInfoFactoryImpl.class);
 
-    @Reference
     protected DeployedAppServices deployedAppServices;
-    @Reference(target = "(type=web)")
-    protected ModuleHandler webModuleHandler;
+
     @Reference
+    protected void setDeployedAppServices(DeployedAppServices deployedAppServices) {
+        this.deployedAppServices = deployedAppServices;
+    }
+
+    protected void unsetDeployedAppServices(DeployedAppServices deployedAppServices) {
+        if (deployedAppServices == this.deployedAppServices) {
+            this.deployedAppServices = null;
+        }
+    }
+
+    protected ModuleHandler webModuleHandler;
+
+    @Reference(target = "(type=web)")
+    protected void setWebModuleHandler(ModuleHandler webModuleHandler) {
+        this.webModuleHandler = webModuleHandler;
+    }
+
+    protected void unsetWebModuleHandler(ModuleHandler webModuleHandler) {
+        if (webModuleHandler == this.webModuleHandler) {
+            this.webModuleHandler = null;
+        }
+    }
+
     protected ApplicationManager applicationManager;
+
+    @Reference
+    protected void setApplicationManager(ApplicationManager applicationManager) {
+        this.applicationManager = applicationManager;
+    }
+
+    protected void unsetApplicationManager(ApplicationManager applicationManager) {
+        if (applicationManager == this.applicationManager) {
+            this.applicationManager = null;
+        }
+    }
 
     // WAR expansion ...
 
@@ -79,7 +111,7 @@ public class WARDeployedAppInfoFactoryImpl extends AbstractDeployedAppInfoFactor
      * time stamp.
      *
      * @param absPath The absolute path of the file which is to be tested.
-     * @param file The file which is to be tested.
+     * @param file    The file which is to be tested.
      *
      * @return The new time stamp of the file, if the file is to be expanded.
      *         Null if the file is not to be expanded.

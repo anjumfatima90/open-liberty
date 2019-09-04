@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
@@ -134,10 +135,19 @@ public class ClassLoadingServiceImpl implements LibertyClassLoadingService, Clas
     private final ConcurrentServiceReferenceSet<ClassGenerator> generatorRefs = new ConcurrentServiceReferenceSet<ClassGenerator>(REFERENCE_GENERATORS);
     private final ClassGeneratorManager generatorManager = new ClassGeneratorManager(generatorRefs);
 
+    
+    protected final List<ApplicationExtensionLibrary> appExtLibs = new CopyOnWriteArrayList<>();
+    
     @Reference(cardinality = ReferenceCardinality.MULTIPLE,
-               policy = ReferencePolicy.DYNAMIC,
-               policyOption = ReferencePolicyOption.GREEDY)
-    protected volatile List<ApplicationExtensionLibrary> appExtLibs;
+                    policy = ReferencePolicy.DYNAMIC,
+                    policyOption = ReferencePolicyOption.GREEDY)
+    protected void setAppExtLibs(ApplicationExtensionLibrary appExtLib) {
+        this.appExtLibs.add(appExtLib);
+    }
+    
+    protected void unsetAppExtLibs(ApplicationExtensionLibrary appExtLib) {
+        this.appExtLibs.remove(appExtLib);
+    }
 
     private GlobalClassloadingConfiguration globalConfig;
 

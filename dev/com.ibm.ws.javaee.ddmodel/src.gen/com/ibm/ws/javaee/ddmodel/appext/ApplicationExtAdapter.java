@@ -12,15 +12,18 @@
 package com.ibm.ws.javaee.ddmodel.appext;
 
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import com.ibm.ws.javaee.dd.app.Application;
-import com.ibm.ws.javaee.dd.app.Module;
-import org.osgi.service.component.annotations.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
+
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.container.service.app.deploy.ApplicationInfo;
-import com.ibm.ws.container.service.app.deploy.ModuleInfo;
 import com.ibm.ws.container.service.app.deploy.NestedConfigHelper;
 import com.ibm.ws.container.service.app.deploy.extended.ExtendedApplicationInfo;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -33,20 +36,29 @@ import com.ibm.wsspi.artifact.ArtifactContainer;
 import com.ibm.wsspi.artifact.overlay.OverlayContainer;
 
 @Component(configurationPolicy = ConfigurationPolicy.IGNORE,
-    service = ContainerAdapter.class,
-    property = { "service.vendor=IBM", "toType=com.ibm.ws.javaee.dd.appext.ApplicationExt" })
+           service = ContainerAdapter.class,
+           property = { "service.vendor=IBM", "toType=com.ibm.ws.javaee.dd.appext.ApplicationExt" })
 public class ApplicationExtAdapter implements ContainerAdapter<com.ibm.ws.javaee.dd.appext.ApplicationExt> {
 
-     private static final String MODULE_NAME_INVALID = "module.name.invalid";
-     private static final String MODULE_NAME_NOT_SPECIFIED = "module.name.not.specified";
-     private static final TraceComponent tc = Tr.register(ApplicationExtAdapter.class);
+    private static final String MODULE_NAME_INVALID = "module.name.invalid";
+    private static final String MODULE_NAME_NOT_SPECIFIED = "module.name.not.specified";
+    private static final TraceComponent tc = Tr.register(ApplicationExtAdapter.class);
+
+    final List<com.ibm.ws.javaee.dd.appext.ApplicationExt> configurations = new CopyOnWriteArrayList<>();
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, policyOption = ReferencePolicyOption.GREEDY)
-volatile List<com.ibm.ws.javaee.dd.appext.ApplicationExt> configurations;
+    protected void setConfigurations(com.ibm.ws.javaee.dd.appext.ApplicationExt configuration) {
+        this.configurations.add(configuration);
+    }
+
+    protected void unsetConfigurations(com.ibm.ws.javaee.dd.appext.ApplicationExt configuration) {
+        this.configurations.remove(configuration);
+    }
 
     @Override
     @FFDCIgnore(ParseException.class)
-    public com.ibm.ws.javaee.dd.appext.ApplicationExt adapt(Container root, OverlayContainer rootOverlay, ArtifactContainer artifactContainer, Container containerToAdapt) throws UnableToAdaptException {
+    public com.ibm.ws.javaee.dd.appext.ApplicationExt adapt(Container root, OverlayContainer rootOverlay, ArtifactContainer artifactContainer,
+                                                            Container containerToAdapt) throws UnableToAdaptException {
         com.ibm.ws.javaee.dd.app.Application primary = containerToAdapt.adapt(com.ibm.ws.javaee.dd.app.Application.class);
         String primaryVersion = primary == null ? null : primary.getVersion();
         String ddEntryName;
@@ -58,17 +70,16 @@ volatile List<com.ibm.ws.javaee.dd.appext.ApplicationExt> configurations;
         }
 
         Entry ddEntry = containerToAdapt.getEntry(ddEntryName);
-com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl fromConfig = getConfigOverrides(rootOverlay, artifactContainer);
-if (ddEntry == null && fromConfig == null)
-    return null;
+        com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl fromConfig = getConfigOverrides(rootOverlay, artifactContainer);
+        if (ddEntry == null && fromConfig == null)
+            return null;
         if (ddEntry != null) {
             try {
-                com.ibm.ws.javaee.dd.appext.ApplicationExt fromApp = 
-              new com.ibm.ws.javaee.ddmodel.appext.ApplicationExtDDParser(containerToAdapt, ddEntry, xmi).parse();
-               if (fromConfig == null) {
-                   return fromApp;
-                } else {  
-                   fromConfig.setDelegate(fromApp);
+                com.ibm.ws.javaee.dd.appext.ApplicationExt fromApp = new com.ibm.ws.javaee.ddmodel.appext.ApplicationExtDDParser(containerToAdapt, ddEntry, xmi).parse();
+                if (fromConfig == null) {
+                    return fromApp;
+                } else {
+                    fromConfig.setDelegate(fromApp);
                     return fromConfig;
                 }
             } catch (ParseException e) {
@@ -78,26 +89,27 @@ if (ddEntry == null && fromConfig == null)
 
         return fromConfig;
     }
-private com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl getConfigOverrides(OverlayContainer rootOverlay, ArtifactContainer artifactContainer) {
-     if (configurations == null || configurations.isEmpty())
-          return null;
 
-     ApplicationInfo appInfo = (ApplicationInfo) rootOverlay.getFromNonPersistentCache(artifactContainer.getPath(), ApplicationInfo.class);
-     NestedConfigHelper configHelper = null;
-     if (appInfo != null && appInfo instanceof ExtendedApplicationInfo)
-          configHelper = ((ExtendedApplicationInfo) appInfo).getConfigHelper();
-      if (configHelper == null)
-          return null;
+    private com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl getConfigOverrides(OverlayContainer rootOverlay, ArtifactContainer artifactContainer) {
+        if (configurations == null || configurations.isEmpty())
+            return null;
 
-     String servicePid = (String) configHelper.get("service.pid");
-     String extendsPid = (String) configHelper.get("ibm.extends.source.pid");
-     for (com.ibm.ws.javaee.dd.appext.ApplicationExt config : configurations) {
-          com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl configImpl = (com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl) config;
-          String parentPid = (String) configImpl.getConfigAdminProperties().get("config.parentPID");
-          if ( servicePid.equals(parentPid) || parentPid.equals(extendsPid)) {
-                    return configImpl;
-          }
-     }
-     return null;
-}
+        ApplicationInfo appInfo = (ApplicationInfo) rootOverlay.getFromNonPersistentCache(artifactContainer.getPath(), ApplicationInfo.class);
+        NestedConfigHelper configHelper = null;
+        if (appInfo != null && appInfo instanceof ExtendedApplicationInfo)
+            configHelper = ((ExtendedApplicationInfo) appInfo).getConfigHelper();
+        if (configHelper == null)
+            return null;
+
+        String servicePid = (String) configHelper.get("service.pid");
+        String extendsPid = (String) configHelper.get("ibm.extends.source.pid");
+        for (com.ibm.ws.javaee.dd.appext.ApplicationExt config : configurations) {
+            com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl configImpl = (com.ibm.ws.javaee.ddmodel.appext.ApplicationExtComponentImpl) config;
+            String parentPid = (String) configImpl.getConfigAdminProperties().get("config.parentPID");
+            if (servicePid.equals(parentPid) || parentPid.equals(extendsPid)) {
+                return configImpl;
+            }
+        }
+        return null;
+    }
 }

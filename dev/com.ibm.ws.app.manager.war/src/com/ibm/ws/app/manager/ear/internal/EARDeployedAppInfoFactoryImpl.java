@@ -52,8 +52,18 @@ public class EARDeployedAppInfoFactoryImpl extends AbstractDeployedAppInfoFactor
                                                           "com.ibm.ws.app.manager.war.internal.resources.Messages",
                                                           "com.ibm.ws.app.manager.ear.internal.EARDeployedAppInfoFactoryImpl");
 
-    @Reference
     protected DeployedAppServices deployedAppServices;
+
+    @Reference
+    protected void setDeployedAppServices(DeployedAppServices deployedAppServices) {
+        this.deployedAppServices = deployedAppServices;
+    }
+
+    protected void unsetDeployedAppServices(DeployedAppServices deployedAppServices) {
+        if (deployedAppServices == this.deployedAppServices) {
+            this.deployedAppServices = null;
+        }
+    }
 
     protected ModuleHandler webModuleHandler;
     protected ModuleHandler ejbModuleHandler;

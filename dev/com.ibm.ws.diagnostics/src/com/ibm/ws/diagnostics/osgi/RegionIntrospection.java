@@ -30,8 +30,19 @@ import com.ibm.wsspi.logging.Introspector;
 @Component
 public class RegionIntrospection implements Introspector {
 
-    @Reference
+    
     private RegionDigraph digraph;
+    
+    @Reference
+    protected void setDigraph(RegionDigraph digraph) {
+        this.digraph = digraph;
+    }
+    
+    protected void unsetDigraph(RegionDigraph digraph) {
+        if(digraph == this.digraph) {
+            this.digraph = null;
+        }     
+    }
 
     private BundleContext systemContext;
 

@@ -33,8 +33,18 @@ public class AuthenticationAliasComponentImpl implements com.ibm.ws.javaee.dd.co
         name = (java.lang.String) config.get("name");
     }
 
-    @Reference
     org.osgi.service.cm.ConfigurationAdmin configAdmin;
+
+    @Reference
+    protected void setConfigAdmin(org.osgi.service.cm.ConfigurationAdmin configAdmin) {
+        this.configAdmin = configAdmin;
+    }
+
+    protected void unsetConfigAdmin(org.osgi.service.cm.ConfigurationAdmin configAdmin) {
+        if (configAdmin == this.configAdmin) {
+            this.configAdmin = null;
+        }
+    }
 
     private String getIDForPID(String pid) {
         try {
