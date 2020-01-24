@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -80,8 +81,9 @@ public class NonZipExtensionFilesInBootInfLibTests20 extends AbstractSpringTests
                     Files.createFile(tempFile.toPath());
                 }
                 putANonZipEntry(appFile, tempFile);
-                appFile.delete();
-                Files.move(tempFile.toPath(), appFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Path appPath = appFile.toPath();
+                Files.delete(appPath);
+                Files.move(tempFile.toPath(), appPath, StandardCopyOption.REPLACE_EXISTING);
             }
         }
 
@@ -109,8 +111,9 @@ public class NonZipExtensionFilesInBootInfLibTests20 extends AbstractSpringTests
                     Files.createFile(tempFile.toPath());
                 }
                 putAZipEntryWithNonZipExtension(appFile, tempFile);
-                appFile.delete();
-                Files.move(tempFile.toPath(), appFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                Path appPath = appFile.toPath();
+                Files.delete(appPath);
+                Files.move(tempFile.toPath(), appPath, StandardCopyOption.REPLACE_EXISTING);
             }
         }
 
