@@ -34,8 +34,8 @@ Subsystem-Name: JavaServer Faces 2.2
 -features=com.ibm.websphere.appserver.javax.cdi-1.2, \
  com.ibm.websphere.appserver.servlet-3.1, \
  com.ibm.websphere.appserver.javax.validation-1.1, \
- com.ibm.websphere.appserver.javax.jsf-2.2, \
  com.ibm.websphere.appserver.jsp-2.3, \
+ com.ibm.websphere.appserver.javax.jsf-2.2, \ 
  com.ibm.websphere.appserver.jsfProvider-2.2.0.MyFaces, \
  com.ibm.websphere.appserver.javaeeCompatible-7.0
 -bundles=com.ibm.ws.org.apache.commons.beanutils.1.9.4, \
