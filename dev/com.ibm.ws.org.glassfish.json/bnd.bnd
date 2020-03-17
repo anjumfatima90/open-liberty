@@ -15,3 +15,5 @@
 
 -buildpath: \
 	org.glassfish:javax.json;version=1.0.4
+
+jakartaeeMe: true
