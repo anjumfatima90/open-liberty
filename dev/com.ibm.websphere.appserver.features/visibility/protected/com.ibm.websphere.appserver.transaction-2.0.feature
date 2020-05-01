@@ -1,5 +1,5 @@
 -include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.transaction-1.2
+symbolicName=com.ibm.websphere.appserver.transaction-2.0
 visibility=protected
 singleton=true
 IBM-API-Package: javax.transaction;  type="spec", \
@@ -14,28 +14,28 @@ IBM-SPI-Package: com.ibm.wsspi.tx
 IBM-API-Service: com.ibm.wsspi.uow.UOWManager, \
  javax.transaction.TransactionSynchronizationRegistry, \
  javax.transaction.UserTransaction
--features=com.ibm.websphere.appserver.javax.connector.internal-1.7, \
- com.ibm.websphere.appserver.javax.cdi-1.2; ibm.tolerates:="2.0"; apiJar=false, \
- com.ibm.websphere.appserver.jta-1.2, \
- com.ibm.websphere.appserver.injection-1.0, \
- com.ibm.websphere.appserver.javax.servlet-3.0; ibm.tolerates:="3.1,4.0"; apiJar=false, \
+-features=com.ibm.websphere.appserver.jakarta.connector.internal-2.0, \
+ com.ibm.websphere.appserver.jakarta.cdi-3.0; apiJar=false, \
+ com.ibm.websphere.appserver.jta-2.0, \
+ com.ibm.websphere.appserver.injection-2.0, \
+ com.ibm.websphere.appserver.jakarta.servlet-5.0; apiJar=false, \
  com.ibm.websphere.appserver.artifact-1.0, \
  com.ibm.websphere.appserver.javaeedd-1.0, \
  com.ibm.websphere.appserver.containerServices-1.0, \
- com.ibm.websphere.appserver.javax.annotation-1.2; ibm.tolerates:=1.3; apiJar=false, \
- com.ibm.websphere.appserver.anno-1.0
--bundles=com.ibm.ws.tx.jta.extensions, \
- com.ibm.ws.transaction; start-phase:=CONTAINER_LATE, \
- com.ibm.tx.jta, \
- com.ibm.ws.transaction.cdi, \
- com.ibm.tx.util, \
- com.ibm.tx.ltc, \
+ com.ibm.websphere.appserver.jakarta.annotation-2.0; apiJar=false, \
+ com.ibm.websphere.appserver.anno-2.0
+-bundles=com.ibm.ws.tx.jta.extensions.jakarta, \
+ com.ibm.ws.transaction.jakarta; start-phase:=CONTAINER_LATE, \
+ com.ibm.tx.jta.jakarta, \
+ com.ibm.ws.transaction.cdi.jakarta, \
+ com.ibm.tx.util.jakarta, \
+ com.ibm.tx.ltc.jakarta, \
  com.ibm.rls.jdbc, \
- com.ibm.ws.tx.embeddable, \
+ com.ibm.ws.tx.embeddable.jakarta, \
  com.ibm.ws.recoverylog, \
- com.ibm.ws.cdi.interfaces
+ com.ibm.ws.cdi.interfaces.jakarta
 -jars=com.ibm.websphere.appserver.spi.transaction; location:=dev/spi/ibm/
 -files=dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.transaction_1.1-javadoc.zip
-kind=ga
-edition=core
+kind=noship
+edition=full
 WLP-Activation-Type: parallel
