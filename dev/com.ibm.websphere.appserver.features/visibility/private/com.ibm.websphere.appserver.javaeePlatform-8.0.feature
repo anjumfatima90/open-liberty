@@ -1,10 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Feb 08 16:22:51 CST 2021
 symbolicName=com.ibm.websphere.appserver.javaeePlatform-8.0
-WLP-DisableAllFeatures-OnConflict: false
-IBM-Process-Types: client, server
--features=com.ibm.websphere.appserver.javaeePlatform-7.0
--bundles=com.ibm.ws.javaee.platform.v8, \
- com.ibm.ws.javaee.version
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.javaeePlatform-7.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.javaee.platform.v8, com.ibm.ws.javaee.version
+IBM-Process-Types=client, server

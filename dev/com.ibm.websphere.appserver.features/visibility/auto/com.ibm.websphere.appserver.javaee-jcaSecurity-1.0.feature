@@ -1,10 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Feb 08 16:22:51 CST 2021
+IBM-Install-Policy=when-satisfied
 symbolicName=com.ibm.websphere.appserver.javaee-jcaSecurity-1.0
-IBM-Provision-Capability:\
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.transaction-1.2)(osgi.identity=com.ibm.websphere.appserver.transaction-1.1)))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jcaSecurity-1.0))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.security.jca
 kind=ga
+-bundles=com.ibm.ws.security.jca
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.transaction-1.2)(osgi.identity\=com.ibm.websphere.appserver.transaction-1.1)))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.jcaSecurity-1.0))"
+WLP-Activation-Type=parallel

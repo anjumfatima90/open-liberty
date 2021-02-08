@@ -1,14 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Feb 08 16:22:51 CST 2021
 symbolicName=com.ibm.websphere.appclient.client-1.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
-IBM-Process-Types: client, \
- server
--jars=com.ibm.ws.appclient.boot, \
- com.ibm.ws.kernel.boot
--files=bin/client; ibm.executable:=true; ibm.file.encoding:=ebcdic, \
- bin/client.bat, \
- bin/tools/ws-client.jar
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+WLP-Activation-Type=parallel
 edition=base
-WLP-Activation-Type: parallel
+-files=bin/client; ibm.executable\:\=true; ibm.file.encoding\:\=ebcdic, bin/client.bat, bin/tools/ws-client.jar
+IBM-Process-Types=client, server
+-jars=com.ibm.ws.appclient.boot, com.ibm.ws.kernel.boot

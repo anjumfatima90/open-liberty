@@ -1,8 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.concurrencyPolicy-1.0
-WLP-DisableAllFeatures-OnConflict: false
+#
+#Mon Feb 08 16:22:51 CST 2021
 visibility=protected
--bundles=com.ibm.ws.concurrency.policy
+symbolicName=com.ibm.websphere.appserver.concurrencyPolicy-1.0
 kind=ga
+-bundles=com.ibm.ws.concurrency.policy
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

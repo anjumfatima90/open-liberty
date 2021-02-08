@@ -1,9 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.cdi1.2-jsf2.2
+#
+#Mon Feb 08 16:22:51 CST 2021
+IBM-Install-Policy=when-satisfied
 visibility=private
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.cdi-1.2))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jsf-2.2))"
--bundles=com.ibm.ws.cdi.1.2.jsf
-IBM-Install-Policy: when-satisfied
+symbolicName=com.ibm.websphere.appserver.cdi1.2-jsf2.2
 kind=ga
+-bundles=com.ibm.ws.cdi.1.2.jsf
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.cdi-1.2))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.jsf-2.2))"

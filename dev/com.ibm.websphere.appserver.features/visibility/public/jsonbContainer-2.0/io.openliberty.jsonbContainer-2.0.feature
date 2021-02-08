@@ -1,17 +1,13 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Feb 08 16:22:51 CST 2021
 symbolicName=io.openliberty.jsonbContainer-2.0
 visibility=public
-IBM-API-Package: jakarta.json.bind; type="spec", \
- jakarta.json.bind.adapter; type="spec", \
- jakarta.json.bind.annotation; type="spec", \
- jakarta.json.bind.config; type="spec", \
- jakarta.json.bind.serializer; type="spec", \
- jakarta.json.bind.spi; type="spec"
-IBM-ShortName: jsonbContainer-2.0
-Subsystem-Name: Jakarta JSON Binding 2.0 Container
--features=io.openliberty.jsonbImpl-2.0.0, \
- com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=com.ibm.ws.jsonb.service
+-include=~${workspace}/cnf/resources/bnd/feature.props
 kind=beta
+IBM-API-Package=jakarta.json.bind; type\="spec", jakarta.json.bind.adapter; type\="spec", jakarta.json.bind.annotation; type\="spec", jakarta.json.bind.config; type\="spec", jakarta.json.bind.serializer; type\="spec", jakarta.json.bind.spi; type\="spec"
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.jsonbImpl-2.0.0,com.ibm.websphere.appserver.eeCompatible-9.0
+-bundles=com.ibm.ws.jsonb.service
+Subsystem-Name=Jakarta JSON Binding 2.0 Container
+IBM-ShortName=jsonbContainer-2.0

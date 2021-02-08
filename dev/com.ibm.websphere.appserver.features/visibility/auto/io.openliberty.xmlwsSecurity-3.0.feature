@@ -1,13 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Feb 08 16:22:51 CST 2021
 symbolicName=io.openliberty.xmlwsSecurity-3.0
 visibility=private
-IBM-App-ForceRestart: uninstall, \
- install
-IBM-Provision-Capability: \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.xmlWS-3.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.appSecurity-4.0))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.jaxws.2.3.security
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=uninstall, install
+IBM-Install-Policy=when-satisfied
 kind=beta
+WLP-Activation-Type=parallel
 edition=base
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.jaxws.2.3.security
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.xmlWS-3.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.appSecurity-4.0))"
