@@ -1,10 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:54 CST 2021
 symbolicName=com.ibm.websphere.appserver.jcaJ2eeManagement-1.0
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 singleton=true
-IBM-Provision-Capability: osgi.identity;filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jca-1.7))", \
- osgi.identity;filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.j2eeManagement-1.1))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.jca.management.j2ee
 kind=ga
+WLP-Activation-Type=parallel
 edition=base
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.jca.management.j2ee
+IBM-Provision-Capability=osgi.identity;filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.jca-1.7))", osgi.identity;filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.j2eeManagement-1.1))"

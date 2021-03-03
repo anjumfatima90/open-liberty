@@ -1,13 +1,13 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.internal.optional.jaxws-2.2
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
-singleton=true
-IBM-App-ForceRestart: uninstall, \
- install
-Subsystem-Name: Java Web Services API 2.2
--bundles=\
- com.ibm.websphere.javaee.jaxws.2.2; require-java:="9"; location:="dev/api/spec/,lib/"; apiJar=false
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=uninstall, install
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+singleton=true
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.websphere.javaee.jaxws.2.2; require-java\:\="9"; location\:\="dev/api/spec/,lib/"; apiJar\=false
+Subsystem-Name=Java Web Services API 2.2

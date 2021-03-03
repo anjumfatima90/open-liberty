@@ -1,8 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:54 CST 2021
+IBM-Install-Policy=when-satisfied
 symbolicName=io.openliberty.appAuthorizationWeb-2.0
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.webAppSecurity-2.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.appAuthorization-2.0))"
-IBM-Install-Policy: when-satisfied
--bundles=io.openliberty.security.authorization.internal.jacc.web
 kind=beta
+-bundles=io.openliberty.security.authorization.internal.jacc.web
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.webAppSecurity-2.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.appAuthorization-2.0))"

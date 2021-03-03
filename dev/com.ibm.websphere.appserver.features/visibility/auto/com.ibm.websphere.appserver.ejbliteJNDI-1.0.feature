@@ -1,11 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:54 CST 2021
 symbolicName=com.ibm.websphere.appserver.ejbliteJNDI-1.0
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.ejbLiteCore-1.0)(osgi.identity=io.openliberty.ejbLiteCore-2.0)))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.jndi-1.0))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.jndi.ejb
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
+IBM-Install-Policy=when-satisfied
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.jndi.ejb
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.ejbLiteCore-1.0)(osgi.identity\=io.openliberty.ejbLiteCore-2.0)))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.jndi-1.0))"

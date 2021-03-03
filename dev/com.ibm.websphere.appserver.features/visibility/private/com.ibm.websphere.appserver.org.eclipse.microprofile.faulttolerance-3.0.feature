@@ -1,9 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.org.eclipse.microprofile.faulttolerance-3.0
-singleton=true
--features=com.ibm.websphere.appserver.javax.cdi-2.0, \
-          io.openliberty.mpCompatible-4.0
--bundles=io.openliberty.org.eclipse.microprofile.faulttolerance.3.0; location:="dev/api/stable/,lib/"; mavenCoordinates="org.eclipse.microprofile.fault-tolerance:microprofile-fault-tolerance-api:3.0"
 kind=ga
+-bundles=io.openliberty.org.eclipse.microprofile.faulttolerance.3.0; location\:\="dev/api/stable/,lib/"; mavenCoordinates\="org.eclipse.microprofile.fault-tolerance\:microprofile-fault-tolerance-api\:3.0"
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.mpCompatible-4.0,com.ibm.websphere.appserver.javax.cdi-2.0
+singleton=true
+WLP-Activation-Type=parallel

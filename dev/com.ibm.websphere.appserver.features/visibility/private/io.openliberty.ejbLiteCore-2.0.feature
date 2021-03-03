@@ -1,7 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=io.openliberty.ejbLiteCore-2.0
--features=io.openliberty.ejbCore-2.0
--bundles=com.ibm.ws.ejbcontainer.session
 kind=beta
+-bundles=com.ibm.ws.ejbcontainer.session
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.ejbCore-2.0
+WLP-Activation-Type=parallel

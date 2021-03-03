@@ -1,9 +1,9 @@
-# This private feature corresponds to using a JSF-providing feature
-# with just a container and no implementation (e.g. facesContainer-3.0)
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=io.openliberty.facesProvider-3.0.0.Container
-singleton=true
+#
+#Wed Mar 03 12:43:55 CST 2021
 visibility=private
+symbolicName=io.openliberty.facesProvider-3.0.0.Container
 kind=beta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+singleton=true
+WLP-Activation-Type=parallel

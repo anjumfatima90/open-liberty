@@ -1,11 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.javax.annotation-1.1
-WLP-DisableAllFeatures-OnConflict: false
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 singleton=true
-IBM-Process-Types: server, \
- client
--features=com.ibm.websphere.appserver.eeCompatible-6.0; ibm.tolerates:="7.0, 8.0"
--bundles=com.ibm.websphere.javaee.annotation.1.1; location:="dev/api/spec/,lib/"; mavenCoordinates="javax.annotation:javax.annotation-api:1.2"
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.eeCompatible-6.0;ibm.tolerates\:\="7.0,8.0"
+-bundles=com.ibm.websphere.javaee.annotation.1.1; location\:\="dev/api/spec/,lib/"; mavenCoordinates\="javax.annotation\:javax.annotation-api\:1.2"
+IBM-Process-Types=server, client

@@ -1,18 +1,15 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=io.openliberty.restfulWS-3.0
 visibility=public
-singleton=true
-IBM-API-Package: com.ibm.websphere.jaxrs.server; type="ibm-api", \
-IBM-App-ForceRestart: uninstall, \
- install
-IBM-ShortName: restfulWS-3.0
-WLP-AlsoKnownAs: jaxrs-3.0
-Subsystem-Name: Jakarta RESTful Web Services 3.0
--features=\
- io.openliberty.restfulWSClient-3.0, \
- com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=\
- io.openliberty.org.jboss.resteasy.server.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 kind=beta
+singleton=true
+WLP-AlsoKnownAs=jaxrs-3.0
+IBM-API-Package=com.ibm.websphere.jaxrs.server; type\="ibm-api", IBM-App-ForceRestart\: uninstall, install
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.restfulWSClient-3.0,com.ibm.websphere.appserver.eeCompatible-9.0
+-bundles=io.openliberty.org.jboss.resteasy.server.jakarta
+Subsystem-Name=Jakarta RESTful Web Services 3.0
+IBM-ShortName=restfulWS-3.0

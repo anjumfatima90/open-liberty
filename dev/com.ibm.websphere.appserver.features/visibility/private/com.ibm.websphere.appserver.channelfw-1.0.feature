@@ -1,13 +1,13 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.channelfw-1.0
-WLP-DisableAllFeatures-OnConflict: false
-IBM-API-Package: com.ibm.websphere.endpoint; type="ibm-api"
-IBM-Process-Types: server, \
- client
--bundles=com.ibm.ws.timer, \
- com.ibm.ws.channelfw
--jars=com.ibm.websphere.appserver.api.endpoint; location:=dev/api/ibm/
--files=dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.endpoint_1.0-javadoc.zip
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+IBM-API-Package=com.ibm.websphere.endpoint; type\="ibm-api"
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.timer, com.ibm.ws.channelfw
+-files=dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.endpoint_1.0-javadoc.zip
+IBM-Process-Types=server, client
+-jars=com.ibm.websphere.appserver.api.endpoint; location\:\=dev/api/ibm/

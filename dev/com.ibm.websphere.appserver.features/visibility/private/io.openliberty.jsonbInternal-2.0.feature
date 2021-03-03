@@ -1,7 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=io.openliberty.jsonbInternal-2.0
+#
+#Wed Mar 03 12:43:55 CST 2021
 visibility=private
--features=io.openliberty.jsonbImpl-2.0.0;
+symbolicName=io.openliberty.jsonbInternal-2.0
 kind=beta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+-features=,io.openliberty.jsonbImpl-2.0.0
+WLP-Activation-Type=parallel

@@ -1,7 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.authFilter-1.0
-WLP-DisableAllFeatures-OnConflict: false
+#
+#Wed Mar 03 12:43:55 CST 2021
 visibility=protected
--features=io.openliberty.servlet.api-3.0; ibm.tolerates:="3.1,4.0,5.0"
+symbolicName=com.ibm.websphere.appserver.authFilter-1.0
 kind=ga
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
+-features=io.openliberty.servlet.api-3.0;ibm.tolerates\:\="3.1,4.0,5.0"
+WLP-DisableAllFeatures-OnConflict=false

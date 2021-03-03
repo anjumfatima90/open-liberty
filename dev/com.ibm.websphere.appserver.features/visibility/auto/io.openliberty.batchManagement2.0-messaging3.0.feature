@@ -1,13 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:54 CST 2021
 symbolicName=io.openliberty.batchManagement2.0-messaging3.0
 visibility=private
-IBM-Provision-Capability: \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.messaging-3.0.internal))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.batchManagement-2.0))"
--features=com.ibm.websphere.appserver.transaction-2.0, \
-  io.openliberty.mdb-4.0
--bundles=com.ibm.ws.jbatch.jms.jakarta
-IBM-Install-Policy: when-satisfied
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 kind=noship
+WLP-Activation-Type=parallel
 edition=full
-WLP-Activation-Type: parallel
+-features=io.openliberty.mdb-4.0,com.ibm.websphere.appserver.transaction-2.0
+-bundles=com.ibm.ws.jbatch.jms.jakarta
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.messaging-3.0.internal))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.batchManagement-2.0))"

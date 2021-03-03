@@ -1,9 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.servlet-servletSpi1.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
--jars=com.ibm.websphere.appserver.spi.servlet; location:=dev/spi/ibm/
--files=dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.servlet_2.7-javadoc.zip
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-files=dev/spi/ibm/javadoc/com.ibm.websphere.appserver.spi.servlet_2.7-javadoc.zip
+-jars=com.ibm.websphere.appserver.spi.servlet; location\:\=dev/spi/ibm/

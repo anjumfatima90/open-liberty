@@ -1,9 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.org.eclipse.microprofile.opentracing-2.0
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
--features=io.openliberty.mpCompatible-4.0
--bundles=io.openliberty.org.eclipse.microprofile.opentracing.2.0; location:="dev/api/stable/,lib/"; mavenCoordinates="org.eclipse.microprofile.opentracing:microprofile-opentracing-api:2.0"
 kind=ga
+WLP-Activation-Type=parallel
+-features=io.openliberty.mpCompatible-4.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.org.eclipse.microprofile.opentracing.2.0; location\:\="dev/api/stable/,lib/"; mavenCoordinates\="org.eclipse.microprofile.opentracing\:microprofile-opentracing-api\:2.0"

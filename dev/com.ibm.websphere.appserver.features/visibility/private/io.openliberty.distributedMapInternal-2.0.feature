@@ -1,15 +1,13 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=io.openliberty.distributedMapInternal-2.0
 visibility=private
-singleton=true
-IBM-App-ForceRestart: install, \
- uninstall
-Subsystem-Version: 2.0.0
--features=\
-  io.openliberty.servlet.api-5.0,\
-  com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=\
-  io.openliberty.dynacache.internal
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
 kind=beta
+singleton=true
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.servlet.api-5.0,com.ibm.websphere.appserver.eeCompatible-9.0
+-bundles=io.openliberty.dynacache.internal
+Subsystem-Version=2.0.0

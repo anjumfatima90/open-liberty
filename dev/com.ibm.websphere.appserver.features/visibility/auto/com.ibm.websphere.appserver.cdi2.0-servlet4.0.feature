@@ -1,12 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:54 CST 2021
 symbolicName=com.ibm.websphere.appserver.cdi2.0-servlet4.0
 visibility=private
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.cdi-2.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.servlet-4.0))"
--bundles=com.ibm.ws.cdi.2.0.web, \
- com.ibm.ws.cdi.web, \
- com.ibm.websphere.javaee.jsp.2.3; location:="dev/api/spec/,lib/"; mavenCoordinates="javax.servlet.jsp:javax.servlet.jsp-api:2.3.1"
-IBM-Install-Policy: when-satisfied
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.cdi.2.0.web, com.ibm.ws.cdi.web, com.ibm.websphere.javaee.jsp.2.3; location\:\="dev/api/spec/,lib/"; mavenCoordinates\="javax.servlet.jsp\:javax.servlet.jsp-api\:2.3.1"
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.cdi-2.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.servlet-4.0))"

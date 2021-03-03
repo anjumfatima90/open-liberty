@@ -1,12 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Wed Mar 03 12:43:55 CST 2021
 symbolicName=com.ibm.websphere.appserver.authData-2.0
-singleton=true
-Subsystem-Version: 2.0.0
--features=\
- com.ibm.websphere.appserver.jcaSecurity-1.0
--bundles=\
- com.ibm.ws.security.authentication, \
- io.openliberty.security.jaas.internal.common, \
- io.openliberty.security.auth.internal.data
 kind=beta
+-bundles=com.ibm.ws.security.authentication, io.openliberty.security.jaas.internal.common, io.openliberty.security.auth.internal.data
+Subsystem-Version=2.0.0
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=base
+-features=com.ibm.websphere.appserver.jcaSecurity-1.0
+singleton=true
