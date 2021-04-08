@@ -1,12 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=io.openliberty.jdbc4.1.internal.ee-6.0
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 singleton=true
-WLP-DisableAllFeatures-OnConflict: false
--features=\
- com.ibm.websphere.appserver.transaction-1.2; ibm.tolerates:="1.1"
--bundles=\
- com.ibm.ws.jdbc,\
- com.ibm.ws.jdbc.4.1
 kind=ga
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.transaction-1.2;ibm.tolerates:="1.1"
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.jdbc,com.ibm.ws.jdbc.4.1

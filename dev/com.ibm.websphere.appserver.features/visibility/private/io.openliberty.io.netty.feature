@@ -1,7 +1,7 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=io.openliberty.io.netty
-singleton=true
--bundles=io.openliberty.io.netty; location:="lib/";
 kind=noship
+-bundles=io.openliberty.io.netty; location:="lib/";
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=full
-WLP-Activation-Type: parallel
+singleton=true
+WLP-Activation-Type=parallel

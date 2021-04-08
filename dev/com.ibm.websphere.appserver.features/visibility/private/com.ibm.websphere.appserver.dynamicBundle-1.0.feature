@@ -1,9 +1,8 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+IBM-Process-Types=server, client
 symbolicName=com.ibm.websphere.appserver.dynamicBundle-1.0
-WLP-DisableAllFeatures-OnConflict: false
-IBM-Process-Types: server, \
- client
--bundles=com.ibm.ws.dynamic.bundle
 kind=ga
+-bundles=com.ibm.ws.dynamic.bundle
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

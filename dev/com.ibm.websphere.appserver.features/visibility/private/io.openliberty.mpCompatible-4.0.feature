@@ -1,8 +1,8 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=io.openliberty.mpCompatible-4.0
 visibility=private
-singleton=true
--features=com.ibm.websphere.appserver.eeCompatible-8.0
+symbolicName=io.openliberty.mpCompatible-4.0
 kind=ga
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.eeCompatible-8.0
+singleton=true
+WLP-Activation-Type=parallel

@@ -1,11 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=com.ibm.websphere.appserver.certificateCreator-2.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
-singleton=true
-Subsystem-Version: 2.0.0
-IBM-App-ForceRestart: install, \
- uninstall
--bundles=com.ibm.ws.crypto.certificate.creator.acme
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+singleton=true
 edition=base
+-bundles=com.ibm.ws.crypto.certificate.creator.acme
+Subsystem-Version=2.0.0

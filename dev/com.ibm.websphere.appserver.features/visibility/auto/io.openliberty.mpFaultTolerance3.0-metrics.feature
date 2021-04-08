@@ -1,10 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=io.openliberty.mpFaultTolerance3.0-metrics
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 singleton=true
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpFaultTolerance-3.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpMetrics-3.0))"
-IBM-Install-Policy: when-satisfied
--bundles=io.openliberty.microprofile.faulttolerance.3.0.internal.metrics
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.microprofile.faulttolerance.3.0.internal.metrics
+IBM-Provision-Capability=osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpFaultTolerance-3.0))", osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpMetrics-3.0))"

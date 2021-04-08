@@ -1,9 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=com.ibm.websphere.appserver.eeCompatible-9.0
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
-Subsystem-Version: 9.0.0
--bundles=com.ibm.ws.javaee.version
 kind=beta
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.javaee.version
+Subsystem-Version=9.0.0

@@ -1,10 +1,8 @@
-# This private feature corresponds to using a JSF-providing feature
-# with the Apache MyFaces implementation
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.jsfProvider-2.3.0.MyFaces
-WLP-DisableAllFeatures-OnConflict: false
-singleton=true
 visibility=private
+symbolicName=com.ibm.websphere.appserver.jsfProvider-2.3.0.MyFaces
 kind=ga
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+singleton=true
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

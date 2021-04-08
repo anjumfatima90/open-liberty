@@ -1,11 +1,9 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName = io.openliberty.authFilter1.0.internal.ee-9.0
+symbolicName=io.openliberty.authFilter1.0.internal.ee-9.0
+visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
-visibility = private
--features=\
-  io.openliberty.servlet.api-5.0
--bundles=\
-  io.openliberty.security.authentication.internal.filter
 kind=beta
+WLP-Activation-Type=parallel
+-features=io.openliberty.servlet.api-5.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.security.authentication.internal.filter

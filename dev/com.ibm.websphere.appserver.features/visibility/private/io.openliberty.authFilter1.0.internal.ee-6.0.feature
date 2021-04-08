@@ -1,12 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName = io.openliberty.authFilter1.0.internal.ee-6.0
+symbolicName=io.openliberty.authFilter1.0.internal.ee-6.0
+visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 singleton=true
-WLP-DisableAllFeatures-OnConflict: false
-visibility = private
--features=\
-  io.openliberty.servlet.api-3.0; ibm.tolerates:="3.1, 4.0"
--bundles=\
-  com.ibm.ws.security.authentication.filter
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=io.openliberty.servlet.api-3.0;ibm.tolerates:="3.1,4.0"
+-bundles=com.ibm.ws.security.authentication.filter
