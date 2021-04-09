@@ -1,11 +1,13 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.springBoot-2.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=public
-singleton=true
-IBM-ShortName: springBoot-2.0
-IBM-Process-Types: server
-Subsystem-Name: Spring Boot Support 2.0
--features=com.ibm.websphere.appserver.springBootHandler-1.0
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+singleton=true
 edition=core
+-features=com.ibm.websphere.appserver.springBootHandler-1.0
+Subsystem-Name=Spring Boot Support 2.0
+IBM-Process-Types=server
+IBM-ShortName=springBoot-2.0

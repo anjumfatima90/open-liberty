@@ -1,10 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.eeCompatible-7.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 singleton=true
-Subsystem-Version: 7.0.0
--bundles=com.ibm.ws.javaee.version
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.javaee.version
+Subsystem-Version=7.0.0

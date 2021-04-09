@@ -1,13 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-
-# Functionality to support remote client container - primarily assisting in JNDI operations.
-
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.clientContainerRemoteSupportCommon-1.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=private
--features=com.ibm.websphere.appserver.containerServices-1.0, \
- com.ibm.websphere.appserver.iiopclient-1.0
--bundles=com.ibm.ws.clientcontainer.remote.common
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.containerServices-1.0,com.ibm.websphere.appserver.iiopclient-1.0
 edition=base
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.clientcontainer.remote.common

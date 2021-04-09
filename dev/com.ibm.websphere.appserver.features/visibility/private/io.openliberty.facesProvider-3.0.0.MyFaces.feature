@@ -1,9 +1,9 @@
-# This private feature corresponds to using a JSF-providing feature
-# with the Apache MyFaces implementation
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=io.openliberty.facesProvider-3.0.0.MyFaces
-singleton=true
+#
+#Fri Apr 09 10:53:36 CDT 2021
 visibility=private
+symbolicName=io.openliberty.facesProvider-3.0.0.MyFaces
 kind=beta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+singleton=true
+WLP-Activation-Type=parallel

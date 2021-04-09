@@ -1,13 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.mpConfig1.1-cdi1.2
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 singleton=true
-IBM-Provision-Capability: \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpConfig-1.1))", \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.cdi-1.2)(osgi.identity=com.ibm.websphere.appserver.cdi-2.0)))"
--bundles=com.ibm.ws.microprofile.config.1.1.cdi, \
- com.ibm.ws.microprofile.config.1.1.cdi.services
-IBM-Install-Policy: when-satisfied
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.microprofile.config.1.1.cdi, com.ibm.ws.microprofile.config.1.1.cdi.services
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.mpConfig-1.1))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.cdi-1.2)(osgi.identity\=com.ibm.websphere.appserver.cdi-2.0)))"

@@ -1,8 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.iioptransport-1.0
-WLP-DisableAllFeatures-OnConflict: false
--features=com.ibm.websphere.appserver.iiopcommon-1.0
--bundles=com.ibm.ws.transport.iiop.server
 kind=ga
+-bundles=com.ibm.ws.transport.iiop.server
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=base
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.iiopcommon-1.0
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

@@ -1,9 +1,10 @@
-#mpCompatible-0.0 means "everything prior to MicroProfile 4.0"
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=io.openliberty.mpCompatible-0.0
+#
+#Fri Apr 09 10:53:36 CDT 2021
 visibility=private
-singleton=true
+symbolicName=io.openliberty.mpCompatible-0.0
 kind=ga
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 edition=core
-WLP-DisableAllFeatures-OnConflict: false
-WLP-Activation-Type: parallel
+singleton=true
+WLP-Activation-Type=parallel

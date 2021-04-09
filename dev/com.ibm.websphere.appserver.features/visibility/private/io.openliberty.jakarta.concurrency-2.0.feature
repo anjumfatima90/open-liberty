@@ -1,9 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=io.openliberty.jakarta.concurrency-2.0
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
--features=com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=io.openliberty.jakarta.concurrency.2.0; location:="dev/api/spec/,lib/"; mavenCoordinates="jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-api:2.0.0"
 kind=beta
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.eeCompatible-9.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.jakarta.concurrency.2.0; location\:\="dev/api/spec/,lib/"; mavenCoordinates\="jakarta.enterprise.concurrent\:jakarta.enterprise.concurrent-api\:2.0.0"

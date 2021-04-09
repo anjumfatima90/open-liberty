@@ -1,14 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName = io.openliberty.openidConnectServer1.0.internal.ee-9.0
-singleton=true
-visibility = private
--features=\
-  io.openliberty.jakarta.cdi-3.0; apiJar=false, \
-  io.openliberty.pages-3.0, \
-  com.ibm.websphere.appserver.servlet-5.0
--bundles=\
-  io.openliberty.security.common.internal, \
-  io.openliberty.security.openidconnect.internal.clients.common, \
-  io.openliberty.security.openidconnect.internal.server
+#
+#Fri Apr 09 10:53:36 CDT 2021
+visibility=private
+symbolicName=io.openliberty.openidConnectServer1.0.internal.ee-9.0
 kind=noship
+-bundles=io.openliberty.security.common.internal, io.openliberty.security.openidconnect.internal.clients.common, io.openliberty.security.openidconnect.internal.server
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=full
+-features=com.ibm.websphere.appserver.servlet-5.0,io.openliberty.pages-3.0,io.openliberty.jakarta.cdi-3.0;apiJar\=false
+singleton=true

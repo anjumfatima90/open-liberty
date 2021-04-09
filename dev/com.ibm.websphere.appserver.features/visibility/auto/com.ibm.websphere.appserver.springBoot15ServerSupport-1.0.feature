@@ -1,13 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-symbolicName=com.ibm.websphere.appserver.springBoot15ServerSupport-1.0
+#
+#Fri Apr 09 10:53:36 CDT 2021
+IBM-Install-Policy=when-satisfied
 visibility=private
--bundles=com.ibm.ws.springboot.support.web.server.version15
-
-IBM-Provision-Capability: \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.springBoot-1.5))", \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.servlet-3.1)(osgi.identity=com.ibm.websphere.appserver.servlet-4.0)))"
-IBM-Install-Policy: when-satisfied
-
+symbolicName=com.ibm.websphere.appserver.springBoot15ServerSupport-1.0
 kind=ga
+-bundles=com.ibm.ws.springboot.support.web.server.version15
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.springBoot-1.5))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.servlet-3.1)(osgi.identity\=com.ibm.websphere.appserver.servlet-4.0)))"

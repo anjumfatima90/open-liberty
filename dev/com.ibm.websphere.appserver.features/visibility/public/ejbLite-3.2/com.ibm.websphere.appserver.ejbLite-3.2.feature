@@ -1,27 +1,19 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.ejbLite-3.2
-WLP-DisableAllFeatures-OnConflict: false
 visibility=public
-singleton=true
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-ShortName: ejbLite-3.2
-IBM-API-Package: com.ibm.websphere.ejbcontainer.mbean; type="ibm-api", \
- com.ibm.websphere.ejbcontainer; type="internal"
-Subsystem-Category: JavaEE7Application
--features=com.ibm.websphere.appserver.javaeePlatform-7.0, \
- com.ibm.websphere.appserver.javax.ejb-3.2, \
- com.ibm.websphere.appserver.ejbLiteCore-1.0, \
- com.ibm.websphere.appserver.contextService-1.0, \
- com.ibm.websphere.appserver.transaction-1.2, \
- com.ibm.websphere.appserver.eeCompatible-7.0; ibm.tolerates:=8.0, \
- com.ibm.websphere.appserver.javax.interceptor-1.2
--bundles=com.ibm.ws.ejbcontainer.v32, \
- com.ibm.ws.ejbcontainer.timer, \
- com.ibm.ws.ejbcontainer.async
--jars=com.ibm.websphere.appserver.api.ejbcontainer; location:=dev/api/ibm/
--files=dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.ejbcontainer_1.0-javadoc.zip
-Subsystem-Name: Enterprise JavaBeans Lite 3.2
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+singleton=true
+IBM-API-Package=com.ibm.websphere.ejbcontainer.mbean; type\="ibm-api", com.ibm.websphere.ejbcontainer; type\="internal"
+WLP-Activation-Type=parallel
+Subsystem-Category=JavaEE7Application
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.transaction-1.2,com.ibm.websphere.appserver.ejbLiteCore-1.0,com.ibm.websphere.appserver.contextService-1.0,com.ibm.websphere.appserver.javax.ejb-3.2,com.ibm.websphere.appserver.eeCompatible-7.0;ibm.tolerates\:\="8.0",com.ibm.websphere.appserver.javaeePlatform-7.0,com.ibm.websphere.appserver.javax.interceptor-1.2
+Subsystem-Name=Enterprise JavaBeans Lite 3.2
+-bundles=com.ibm.ws.ejbcontainer.v32, com.ibm.ws.ejbcontainer.timer, com.ibm.ws.ejbcontainer.async
+-files=dev/api/ibm/javadoc/com.ibm.websphere.appserver.api.ejbcontainer_1.0-javadoc.zip
+-jars=com.ibm.websphere.appserver.api.ejbcontainer; location\:\=dev/api/ibm/
+IBM-ShortName=ejbLite-3.2

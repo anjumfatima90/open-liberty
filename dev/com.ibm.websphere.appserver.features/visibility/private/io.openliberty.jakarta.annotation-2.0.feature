@@ -1,10 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=io.openliberty.jakarta.annotation-2.0
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
-IBM-Process-Types: server, \
- client
--features=com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=io.openliberty.jakarta.annotation.2.0; location:="dev/api/spec/,lib/"; mavenCoordinates="jakarta.annotation:jakarta.annotation-api:2.0.0"
 kind=beta
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.eeCompatible-9.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.jakarta.annotation.2.0; location\:\="dev/api/spec/,lib/"; mavenCoordinates\="jakarta.annotation\:jakarta.annotation-api\:2.0.0"
+IBM-Process-Types=server, client

@@ -1,10 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
+IBM-Install-Policy=when-satisfied
 symbolicName=io.openliberty.servlet5.0-monitor1.0
-Manifest-Version: 1.0
-IBM-Provision-Capability: \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.monitor-1.0))", \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.servlet-5.0))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.webcontainer.monitor.jakarta
 kind=beta
+-bundles=com.ibm.ws.webcontainer.monitor.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.monitor-1.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.servlet-5.0))"
+Manifest-Version=1.0

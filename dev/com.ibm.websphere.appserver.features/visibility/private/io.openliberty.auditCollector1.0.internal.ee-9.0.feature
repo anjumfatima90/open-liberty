@@ -1,14 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
-
-symbolicName = io.openliberty.auditCollector1.0.internal.ee-9.0
-singleton=true
-visibility = private
-
--features=\
-  com.ibm.websphere.appserver.servlet-5.0
-
--bundles=\
-  com.ibm.ws.security.audit.source.jakarta
-
+#
+#Fri Apr 09 10:53:36 CDT 2021
+visibility=private
+symbolicName=io.openliberty.auditCollector1.0.internal.ee-9.0
 kind=beta
+-bundles=com.ibm.ws.security.audit.source.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
+-features=com.ibm.websphere.appserver.servlet-5.0
+singleton=true

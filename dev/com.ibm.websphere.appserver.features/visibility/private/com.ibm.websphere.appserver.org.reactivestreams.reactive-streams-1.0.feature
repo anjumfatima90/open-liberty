@@ -1,8 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.org.reactivestreams.reactive-streams-1.0
-WLP-DisableAllFeatures-OnConflict: false
-singleton=true
--bundles=com.ibm.websphere.org.reactivestreams.reactive-streams.1.0; location:="dev/api/stable/,lib/"; mavenCoordinates="org.reactivestreams:reactive-streams:1.0.2"
 kind=ga
+-bundles=com.ibm.websphere.org.reactivestreams.reactive-streams.1.0; location\:\="dev/api/stable/,lib/"; mavenCoordinates\="org.reactivestreams\:reactive-streams\:1.0.2"
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+singleton=true
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

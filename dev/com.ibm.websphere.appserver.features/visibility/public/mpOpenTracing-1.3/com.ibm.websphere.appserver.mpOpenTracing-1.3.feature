@@ -1,21 +1,16 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=com.ibm.websphere.appserver.mpOpenTracing-1.3
-WLP-DisableAllFeatures-OnConflict: false
 visibility=public
-singleton=true
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-ShortName: mpOpenTracing-1.3
-Subsystem-Name: MicroProfile OpenTracing 1.3
-IBM-API-Package: \
-  org.eclipse.microprofile.opentracing; type="stable"
--features=\
-  com.ibm.websphere.appserver.opentracing-1.3, \
-  com.ibm.websphere.appserver.org.eclipse.microprofile.opentracing-1.3, \
-  com.ibm.websphere.appserver.mpConfig-1.3; ibm.tolerates:=1.4, \
-  io.openliberty.mpCompatible-0.0
--bundles=\
-  com.ibm.ws.microprofile.opentracing.1.3
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+singleton=true
+IBM-API-Package=org.eclipse.microprofile.opentracing; type\="stable"
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.opentracing-1.3,com.ibm.websphere.appserver.mpConfig-1.3;ibm.tolerates\:\="1.4",io.openliberty.mpCompatible-0.0,com.ibm.websphere.appserver.org.eclipse.microprofile.opentracing-1.3
+-bundles=com.ibm.ws.microprofile.opentracing.1.3
+Subsystem-Name=MicroProfile OpenTracing 1.3
+IBM-ShortName=mpOpenTracing-1.3

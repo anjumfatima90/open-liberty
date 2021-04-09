@@ -1,17 +1,14 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Fri Apr 09 10:53:36 CDT 2021
 symbolicName=io.openliberty.enterpriseBeansPersistentTimer-4.0
 visibility=public
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-ShortName: enterpriseBeansPersistentTimer-4.0
-WLP-AlsoKnownAs: ejbPersistentTimer-4.0
-Subsystem-Name: Jakarta Enterprise Beans 4.0 Persistent Timers
--features=com.ibm.websphere.appserver.eeCompatible-9.0, \
- com.ibm.websphere.appserver.jdbc-4.2; ibm.tolerates:=4.3, \
- io.openliberty.enterpriseBeansLite-4.0, \
- io.openliberty.persistentExecutorSubset-2.0, \
- com.ibm.websphere.appserver.transaction-2.0
--bundles=com.ibm.ws.ejbcontainer.timer.persistent.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
 kind=beta
+WLP-AlsoKnownAs=ejbPersistentTimer-4.0
+WLP-Activation-Type=parallel
 edition=base
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.jdbc-4.2;ibm.tolerates\:\="4.3",com.ibm.websphere.appserver.eeCompatible-9.0,io.openliberty.enterpriseBeansLite-4.0,io.openliberty.persistentExecutorSubset-2.0,com.ibm.websphere.appserver.transaction-2.0
+-bundles=com.ibm.ws.ejbcontainer.timer.persistent.jakarta
+Subsystem-Name=Jakarta Enterprise Beans 4.0 Persistent Timers
+IBM-ShortName=enterpriseBeansPersistentTimer-4.0
