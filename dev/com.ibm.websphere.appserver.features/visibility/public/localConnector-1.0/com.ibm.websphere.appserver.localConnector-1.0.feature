@@ -1,9 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=com.ibm.websphere.appserver.localConnector-1.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=public
-IBM-ShortName: localConnector-1.0
-Subsystem-Name: Admin Local Connector 1.0
--bundles=com.ibm.ws.jmx.connector.local
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
 edition=core
+-bundles=com.ibm.ws.jmx.connector.local
+Subsystem-Name=Admin Local Connector 1.0
+IBM-ShortName=localConnector-1.0

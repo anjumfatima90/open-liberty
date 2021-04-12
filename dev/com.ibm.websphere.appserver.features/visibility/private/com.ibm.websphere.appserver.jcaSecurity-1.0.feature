@@ -1,13 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=com.ibm.websphere.appserver.jcaSecurity-1.0
-WLP-DisableAllFeatures-OnConflict: false
--features=com.ibm.websphere.appserver.containerServices-1.0
--bundles=\
- com.ibm.ws.security.auth.data.common, \
- com.ibm.ws.security.authentication, \
- com.ibm.ws.security.credentials, \
- com.ibm.ws.security.kerberos.auth,\
- com.ibm.websphere.security
 kind=ga
+-bundles=com.ibm.ws.security.auth.data.common, com.ibm.ws.security.authentication, com.ibm.ws.security.credentials, com.ibm.ws.security.kerberos.auth,com.ibm.websphere.security
+-include=~${workspace}/cnf/resources/bnd/feature.props
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.containerServices-1.0
+WLP-DisableAllFeatures-OnConflict=false
+WLP-Activation-Type=parallel

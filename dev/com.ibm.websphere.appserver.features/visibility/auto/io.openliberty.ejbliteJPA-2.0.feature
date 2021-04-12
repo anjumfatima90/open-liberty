@@ -1,11 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:10 CDT 2021
 symbolicName=io.openliberty.ejbliteJPA-2.0
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.ejbLiteCore-2.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.persistenceContainer-3.0))"
-IBM-Install-Policy: when-satisfied
--bundles=com.ibm.ws.ejbcontainer.jpa.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-App-ForceRestart=install, uninstall
+IBM-Install-Policy=when-satisfied
 kind=beta
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.ejbcontainer.jpa.jakarta
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.ejbLiteCore-2.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.persistenceContainer-3.0))"

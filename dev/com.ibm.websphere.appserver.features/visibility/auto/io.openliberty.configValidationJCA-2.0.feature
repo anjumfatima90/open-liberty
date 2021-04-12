@@ -1,13 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:10 CDT 2021
 symbolicName=io.openliberty.configValidationJCA-2.0
 visibility=private
-IBM-Provision-Capability:\
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.restConnector2.0.jakarta))",\
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.connectors-2.0))"
-IBM-Install-Policy: when-satisfied
--bundles=\
- com.ibm.ws.rest.handler.validator,\
- com.ibm.ws.rest.handler.validator.jca.jakarta
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 kind=beta
+WLP-Activation-Type=parallel
 edition=base
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.rest.handler.validator,com.ibm.ws.rest.handler.validator.jca.jakarta
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.restConnector2.0.jakarta))",osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=io.openliberty.connectors-2.0))"

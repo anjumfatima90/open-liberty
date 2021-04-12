@@ -1,9 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=io.openliberty.jakarta.validation-3.0
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
 singleton=true
--features=com.ibm.websphere.appserver.eeCompatible-9.0
--bundles=io.openliberty.jakarta.validation.3.0; location:="dev/api/spec/,lib/"; mavenCoordinates="jakarta.validation:jakarta.validation-api:3.0.0"
 kind=beta
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.eeCompatible-9.0
 edition=core
-WLP-Activation-Type: parallel
+-bundles=io.openliberty.jakarta.validation.3.0; location\:\="dev/api/spec/,lib/"; mavenCoordinates\="jakarta.validation\:jakarta.validation-api\:3.0.0"

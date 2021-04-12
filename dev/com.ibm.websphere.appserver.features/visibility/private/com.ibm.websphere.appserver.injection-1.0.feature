@@ -1,12 +1,12 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=com.ibm.websphere.appserver.injection-1.0
-WLP-DisableAllFeatures-OnConflict: false
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 singleton=true
-IBM-Process-Types: client, \
- server
--features=com.ibm.websphere.appserver.containerServices-1.0, \
- com.ibm.websphere.appserver.anno-1.0
--bundles=com.ibm.ws.injection
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-features=com.ibm.websphere.appserver.containerServices-1.0,com.ibm.websphere.appserver.anno-1.0
+-bundles=com.ibm.ws.injection
+IBM-Process-Types=client, server

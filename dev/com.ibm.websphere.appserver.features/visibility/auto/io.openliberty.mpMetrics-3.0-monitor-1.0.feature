@@ -1,11 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:10 CDT 2021
 symbolicName=io.openliberty.mpMetrics-3.0-monitor-1.0
 visibility=private
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 singleton=true
-IBM-Provision-Capability: \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.mpMetrics-3.0))", \
-  osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.monitor-1.0)))"
--bundles=io.openliberty.microprofile.metrics.internal.3.0.monitor
-IBM-Install-Policy: when-satisfied
 kind=ga
 edition=core
+-bundles=io.openliberty.microprofile.metrics.internal.3.0.monitor
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.mpMetrics-3.0))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.monitor-1.0)))"

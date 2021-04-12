@@ -1,10 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=com.ibm.websphere.appserver.appLifecycle-1.0
-WLP-DisableAllFeatures-OnConflict: false
 visibility=protected
-IBM-Process-Types: server, \
- client
--bundles=com.ibm.ws.app.manager.lifecycle; start-phase:=SERVICE_EARLY
+-include=~${workspace}/cnf/resources/bnd/feature.props
+WLP-DisableAllFeatures-OnConflict=false
 kind=ga
+WLP-Activation-Type=parallel
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.app.manager.lifecycle; start-phase\:\=SERVICE_EARLY
+IBM-Process-Types=server, client

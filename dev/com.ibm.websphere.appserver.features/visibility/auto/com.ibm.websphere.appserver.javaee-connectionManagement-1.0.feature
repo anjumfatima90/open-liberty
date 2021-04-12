@@ -1,11 +1,11 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+#
+#Mon Apr 12 14:46:11 CDT 2021
 symbolicName=com.ibm.websphere.appserver.javaee-connectionManagement-1.0
-IBM-Provision-Capability:\
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(|(osgi.identity=com.ibm.websphere.appserver.transaction-1.2)(osgi.identity=com.ibm.websphere.appserver.transaction-1.1)))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=com.ibm.websphere.appserver.connectionManagement-1.0))"
-IBM-Install-Policy: when-satisfied
--features=com.ibm.websphere.appserver.javax.connector.internal-1.6; ibm.tolerates:=1.7
--bundles=com.ibm.ws.jca.cm
+-include=~${workspace}/cnf/resources/bnd/feature.props
+IBM-Install-Policy=when-satisfied
 kind=ga
+WLP-Activation-Type=parallel
+-features=com.ibm.websphere.appserver.javax.connector.internal-1.6;ibm.tolerates\:\="1.7"
 edition=core
-WLP-Activation-Type: parallel
+-bundles=com.ibm.ws.jca.cm
+IBM-Provision-Capability=osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(|(osgi.identity\=com.ibm.websphere.appserver.transaction-1.2)(osgi.identity\=com.ibm.websphere.appserver.transaction-1.1)))", osgi.identity; filter\:\="(&(type\=osgi.subsystem.feature)(osgi.identity\=com.ibm.websphere.appserver.connectionManagement-1.0))"
