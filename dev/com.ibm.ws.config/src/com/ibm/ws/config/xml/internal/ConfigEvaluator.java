@@ -48,6 +48,7 @@ import com.ibm.ws.config.xml.internal.metatype.ExtendedAttributeDefinition;
 import com.ibm.ws.config.xml.internal.metatype.MetaTypeHelper;
 import com.ibm.ws.config.xml.internal.variables.ConfigVariableRegistry;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
+import com.ibm.ws.kernel.productinfo.ProductInfo;
 import com.ibm.wsspi.kernel.service.utils.FilterUtils;
 import com.ibm.wsspi.kernel.service.utils.MetatypeUtils;
 import com.ibm.wsspi.kernel.service.utils.OnErrorUtil.OnError;
@@ -131,6 +132,17 @@ class ConfigEvaluator {
         // process attributes based on metatype info
         if (attributeMap != null) {
             context.setAttributeDefinitionMap(attributeMap);
+
+            if (!ProductInfo.getBetaEdition()) {
+                for (Map.Entry<String, ExtendedAttributeDefinition> entry : attributeMap.entrySet()) {
+                    ExtendedAttributeDefinition attributeDef = entry.getValue();
+                    if (attributeDef.isBeta()) {
+                        String attributeName = entry.getKey();
+                        issueError("error.ibm.beta.not.valid", attributeName);
+                    }
+                }
+            }
+
             for (Map.Entry<String, ExtendedAttributeDefinition> entry : attributeMap.entrySet()) {
                 ExtendedAttributeDefinition attributeDef = entry.getValue();
                 if (!attributeDef.isFinal()) {
@@ -146,7 +158,6 @@ class ConfigEvaluator {
                         String nodeName = getNodeNameForMessage(registryEntry, config);
 
                         if (config.getId() == null) {
-                            issueError("error.missing.required.attribute.singleton", nodeName, attributeName);
                         } else {
                             issueError("error.missing.required.attribute", nodeName, attributeName, config.getId());
                         }
@@ -176,6 +187,7 @@ class ConfigEvaluator {
                     evaluateMetaTypeAttribute(attributeName, context, attributeDef, flatPrefix, ignoreWarnings);
                 }
             }
+
         }
 
         // process any remaining attributes specified in config

@@ -480,6 +480,9 @@ error.bad.variable.file=CWWKG0106E: The {0} file can not be read.
 error.bad.variable.file.explanation=The file can not be loaded as a variable because it can not be read. 
 error.bad.variable.file.useraction=Verify that the file contains text content and check the operating system permissions for the file.
 
+error.ibm.beta.not.valid=CWWKG0107E:The attribute name {0} cannot be defined as ibm:beta when running on a GA driver.
+error.ibm.beta.not.valid.explanation=Using beta function in GA release is not allowed since the function might not be fully functional.
+error.ibm.beta.not.valid.useraction=Remove the ibm:beta attribute
 
 # Non-TR message
 error.invalidOCDRef=ERROR: Metatype PID [{0}] specifies non-existent object class definition ID [{1}]
