@@ -1,4 +1,4 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+-include=~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=com.ibm.websphere.appserver.org.eclipse.microprofile.jwt-1.2
 visibility=private
 singleton=true
@@ -6,4 +6,4 @@ singleton=true
 -bundles=io.openliberty.org.eclipse.microprofile.jwt.1.2; location:="dev/api/stable/,lib/"; mavenCoordinates="org.eclipse.microprofile.jwt:microprofile-jwt-auth-api:1.2"
 kind=ga
 edition=core
-WLP-Activation-Type: parallel
+WLP-Activation-Type=parallel

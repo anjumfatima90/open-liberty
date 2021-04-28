@@ -1,12 +1,10 @@
--include= ~${workspace}/cnf/resources/bnd/feature.props
+-include=~${workspace}/cnf/resources/bnd/feature.props
 symbolicName=io.openliberty.messaging.defaultresource-3.0
 visibility=private
-IBM-App-ForceRestart: install, \
- uninstall
-IBM-Provision-Capability: osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.messagingClient-3.0))", \
- osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.messagingServer-3.0))"
+IBM-App-ForceRestart=install, uninstall
+IBM-Provision-Capability=osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.messagingClient-3.0))", osgi.identity; filter:="(&(type=osgi.subsystem.feature)(osgi.identity=io.openliberty.messagingServer-3.0))"
 -bundles=com.ibm.ws.messaging.jms.defaultresource
-IBM-Install-Policy: when-satisfied
+IBM-Install-Policy=when-satisfied
 kind=beta
 edition=base
-WLP-Activation-Type: parallel
+WLP-Activation-Type=parallel
