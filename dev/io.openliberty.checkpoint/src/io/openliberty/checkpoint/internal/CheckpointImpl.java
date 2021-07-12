@@ -35,8 +35,8 @@ import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 
 import io.openliberty.checkpoint.internal.criu.ExecuteCRIU;
 import io.openliberty.checkpoint.spi.Checkpoint;
-import io.openliberty.checkpoint.spi.SnapshotFailed;
-import io.openliberty.checkpoint.spi.SnapshotFailed.Type;
+import io.openliberty.checkpoint.spi.SnapshotResult;
+import io.openliberty.checkpoint.spi.SnapshotResult.SnapshotResultType;
 import io.openliberty.checkpoint.spi.SnapshotHook;
 import io.openliberty.checkpoint.spi.SnapshotHookFactory;
 
@@ -79,53 +79,50 @@ public class CheckpointImpl implements Checkpoint {
      *
      * @deprecated Provided to support debugging from osgi console.
      * @param phase the phase to take the snapshot
-     * @throws SnapshotFailed if the snapshot fails
+     * @returns SnapshotResult if the snapshot fails
      */
     @Deprecated
     @Descriptor("Take a snapshot")
-    public void snapshot(@Parameter(names = "-p", absentValue = "") @Descriptor("The phase to snapshot") Phase phase,
-                         @Descriptor("Directory to store the snapshot") File directory) throws SnapshotFailed {
+    public SnapshotResult snapshot(@Parameter(names = "-p", absentValue = "") @Descriptor("The phase to snapshot") Phase phase,
+                                   @Descriptor("Directory to store the snapshot") File directory) {
         doSnapshot(phase, directory);
     }
 
     @Override
     @Descriptor("Take a snapshot")
-    public void snapshot(Phase phase) throws SnapshotFailed {
+    public SnapshotResult snapshot(Phase phase) {
         doSnapshot(phase,
                    locAdmin.resolveResource(WsLocationConstants.SYMBOL_SERVER_WORKAREA_DIR + "checkpoint/image/").asFile());
     }
 
-    private void doSnapshot(Phase phase, File directory) throws SnapshotFailed {
+    private SnapshotResult doSnapshot(Phase phase, File directory) {
         directory.mkdirs();
         Object[] factories = cc.locateServices("hookFactories");
         List<SnapshotHook> snapshotHooks = getHooks(factories, phase);
         prepare(snapshotHooks);
-        try {
-            ExecuteCRIU currentCriu = criu;
-            if (currentCriu == null) {
-                throw new SnapshotFailed(Type.SNAPSHOT_FAILED, "The criu command is not available.", null, 0);
-            } else {
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "criu attempt dump to '" + directory + "' and exit process.");
-                }
 
-                int dumpCode = currentCriu.dump(directory);
-                if (dumpCode < 0) {
-                    throw new SnapshotFailed(Type.SNAPSHOT_FAILED, "The criu dump command failed with error: " + dumpCode, null, dumpCode);
-                }
+        ExecuteCRIU currentCriu = criu;
+        if (currentCriu == null) {
+            return new SnapshotResult(SnapshotResultType.SNAPSHOT_FAILED, "The criu command is not available.", null, 0);
+        } else {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "criu attempt dump to '" + directory + "' and exit process.");
+            }
 
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "criu dump to " + directory + " in recovery.");
-                }
+            SnapshotResult dumpResult = currentCriu.dump(directory);
+
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "criu dump to " + directory + " in recovery.");
             }
-        } catch (Exception e) {
-            abortPrepare(snapshotHooks, e);
-            if (e instanceof SnapshotFailed) {
-                throw (SnapshotFailed) e;
-            }
-            throw new SnapshotFailed(Type.SNAPSHOT_FAILED, "Failed to create snapshot.", e, 0);
         }
-        restore(phase, snapshotHooks);
+        if (dumpResult.getType() == SnapshotResultType.SUCCESS) {
+            restore(phase, snapshotHooks);
+        } else if (dumpResult.getType() == SnapshotResultType.JVM_RESTORE_FAILURE) {
+            return new SnapshotResult(SnapshotResultType.SNAPSHOT_FAILED, "Unexpected JVM failure.", null, 0);
+        } else {
+            abortPrepare(snapshotHooks, dumpResult);
+        }
+        return dumpResult;
     }
 
     List<SnapshotHook> getHooks(Object[] factories, Phase phase) {
@@ -147,7 +144,7 @@ public class CheckpointImpl implements Checkpoint {
     private void callHooks(List<SnapshotHook> snapshotHooks,
                            Consumer<SnapshotHook> perform,
                            BiConsumer<SnapshotHook, Exception> abort,
-                           Function<Exception, SnapshotFailed> failed) throws SnapshotFailed {
+                           Function<Exception, SnapshotResult> snapshotResult) {
         List<SnapshotHook> called = new ArrayList<>(snapshotHooks.size());
         for (SnapshotHook snapshotHook : snapshotHooks) {
             try {
@@ -161,40 +158,36 @@ public class CheckpointImpl implements Checkpoint {
                         // auto FFDC is fine here
                     }
                 }
-                throw failed.apply(abortCause);
+                failed.apply(abortCause);
             }
         }
     }
 
-    private void prepare(List<SnapshotHook> snapshotHooks) throws SnapshotFailed {
+    private void prepare(List<SnapshotHook> snapshotHooks) {
         callHooks(snapshotHooks,
                   SnapshotHook::prepare,
                   SnapshotHook::abortPrepare,
                   CheckpointImpl::failedPrepare);
     }
 
-    private static SnapshotFailed failedPrepare(Exception cause) {
-        return new SnapshotFailed(Type.PREPARE_ABORT, "Failed to prepare for a snapshot.", cause, 0);
+    private static SnapshotResult failedPrepare(Exception cause) {
+        return new SnapshotResult(SnapshotResultType.PREPARE_ABORT, "Failed to prepare for a snapshot.", cause, 0);
     }
 
-    private void abortPrepare(List<SnapshotHook> snapshotHooks, Exception cause) {
+    private void abortPrepare(List<SnapshotHook> snapshotHooks, SnapshotResult snapshotResult) {
         for (SnapshotHook hook : snapshotHooks) {
-            try {
-                hook.abortPrepare(cause);
-            } catch (Exception e) {
-                // ignore
-            }
+            hook.abortPrepare(snapshotResult);
         }
     }
 
-    private void restore(Phase phase, List<SnapshotHook> snapshotHooks) throws SnapshotFailed {
+    private void restore(Phase phase, List<SnapshotHook> snapshotHooks) {
         callHooks(snapshotHooks,
                   SnapshotHook::restore,
                   SnapshotHook::abortRestore,
                   CheckpointImpl::failedRestore);
     }
 
-    private static SnapshotFailed failedRestore(Exception cause) {
-        return new SnapshotFailed(Type.RESTORE_ABORT, "Failed to restore from snapshot.", cause, 0);
+    private static SnapshotResult failedRestore(Exception cause) {
+        return new SnapshotResult((SnapshotResultType.RESTORE_ABORT, "Failed to restore from snapshot.", cause, 0);
     }
 }

@@ -14,27 +14,53 @@ package io.openliberty.checkpoint.spi;
 import org.osgi.annotation.versioning.ProviderType;
 
 @ProviderType
-public class SnapshotFailed extends Exception {
-    private static final long serialVersionUID = -669718085413549145L;
+public class SnapshotResult {
 
-    public enum Type {
-        UNSUPPORTED,
-        PREPARE_ABORT,
-        SNAPSHOT_FAILED,
-        RESTORE_ABORT;
+    public enum SnapshotResultType {
+        SUCCESS(1),
+        UNSUPPORTED_OPERATION(-1),
+        INVALID_ARGUMENTS(-2),
+        SYSTEM_CHECKPOINT_FAILURE(-3),
+        JVM_CHECKPOINT_FAILURE(-4),
+        JVM_RESTORE_FAILURE(-5),
+        UNSUPPORTED(-6),
+        PREPARE_ABORT(-7),
+        SNAPSHOT_FAILED(-8),
+        RESTORE_ABORT(-9);
+
+        private int code;
+
+        private SnapshotResultType(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
     }
 
     private final int errorCode;
     private final Type type;
+    private final String msg;
+    private final Exception cause;
 
-    public SnapshotFailed(Type type, String msg, Exception cause, int errorCode) {
-        super(msg, cause);
+    public SnapshotResult(Type type, String msg, Exception cause, int errorCode) {
+        this.msg = msg;
+        this.cause = cause;
         this.type = type;
         this.errorCode = errorCode;
     }
 
     public Type getType() {
         return type;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public Exception getCause() {
+        return cause;
     }
 
     public int getErrorCode() {
