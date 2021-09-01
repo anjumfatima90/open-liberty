@@ -43,12 +43,16 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.kernel.boot.internal.BootstrapConstants;
 import com.ibm.wsspi.kernel.service.location.MalformedLocationException;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
 import com.ibm.wsspi.kernel.service.location.WsResource;
 import com.ibm.wsspi.kernel.service.utils.FileUtils;
 import com.ibm.wsspi.kernel.service.utils.PathUtils;
+
+import io.openliberty.checkpoint.spi.CheckpointHook;
+import io.openliberty.checkpoint.spi.CheckpointHookFactory;
 
 /**
  *
@@ -83,7 +87,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
     public static WsLocationAdminImpl createLocations(Map<String, Object> initProps) {
         if (instance == null) {
             SymbolRegistry.getRegistry().clear();
-            instance = new WsLocationAdminImpl(initProps);
+            instance = new WsLocationAdminImpl(null, initProps);
         }
 
         return instance;
@@ -100,7 +104,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
     public static WsLocationAdminImpl createLocations(BundleContext ctx) {
         if (instance == null) {
             SymbolRegistry.getRegistry().clear();
-            instance = new WsLocationAdminImpl(new BundleContextMap(ctx));
+            instance = new WsLocationAdminImpl(ctx, new BundleContextMap(ctx));
         }
 
         return instance;
@@ -226,7 +230,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
      * @throws IllegalStateException
      *                                      if bootstrap library location or instance root don't exist.
      */
-    protected WsLocationAdminImpl(Map<String, Object> config) {
+    protected WsLocationAdminImpl(BundleContext bundleContext, Map<String, Object> config) {
         String userRootStr = (String) config.get(WsLocationConstants.LOC_USER_DIR);
         String serverCfgDirStr = (String) config.get(WsLocationConstants.LOC_SERVER_CONFIG_DIR);
         String serverOutDirStr = (String) config.get(WsLocationConstants.LOC_SERVER_OUTPUT_DIR);
@@ -335,7 +339,30 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
 
         addResourcePath(bootstrapLib.getNormalizedPath());
 
-        SymbolRegistry.getRegistry().addStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, (String) config.get(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS));
+        String variableSourceDirs = (String) config.get(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS);
+        SymbolRegistry.getRegistry().addStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, variableSourceDirs);
+
+        if (bundleContext == null) {
+            bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
+        }
+
+        if (bundleContext != null) {
+            bundleContext.registerService(CheckpointHookFactory.class, (p) -> new CheckpointHook() {
+                @Override
+                public void restore() {
+                    String newVariableSourceDirs = getEnv(BootstrapConstants.ENV_VARIABLE_SOURCE_DIRS);
+                    if (!newVariableSourceDirs.equals(variableSourceDirs)) {
+                        SymbolRegistry.getRegistry().replaceStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, newVariableSourceDirs);
+                    }
+                };
+            }, null);
+        }
+    }
+
+    String getEnv(final String key) {
+        return AccessController.doPrivileged((PrivilegedAction<String>) () -> {
+            return System.getenv(key);
+        });
     }
 
     private final void throwInitializationException(RuntimeException t) {
