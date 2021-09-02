@@ -34,6 +34,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.osgi.framework.BundleContext;
+
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
@@ -49,6 +51,9 @@ import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.wsspi.kernel.service.location.VariableRegistry;
 import com.ibm.wsspi.kernel.service.location.WsLocationAdmin;
 import com.ibm.wsspi.kernel.service.location.WsLocationConstants;
+
+import io.openliberty.checkpoint.spi.CheckpointHook;
+import io.openliberty.checkpoint.spi.CheckpointHookFactory;
 
 public class ConfigVariableRegistry implements VariableRegistry, ConfigVariables {
 
@@ -80,9 +85,15 @@ public class ConfigVariableRegistry implements VariableRegistry, ConfigVariables
 
     private final List<File> fsVarRootDirectoryFiles = new ArrayList<File>();
 
-    public ConfigVariableRegistry(VariableRegistry registry, String[] cmdArgs, File variableCacheFile, WsLocationAdmin locationService) {
+    public ConfigVariableRegistry(VariableRegistry registry, String[] cmdArgs, File variableCacheFile, WsLocationAdmin locationService, BundleContext bc) {
         this.registry = registry;
         String fileVariableDirString = locationService.resolveString(WsLocationConstants.SYMBOL_VARIABLE_SOURCE_DIRS);
+        bc.registerService(CheckpointHookFactory.class, (p) -> new CheckpointHook() {
+            @Override
+            public void restore() {
+                System.out.println("In restore: In ConfigVAriableRegistry");
+            };
+        }, null);
         StringTokenizer st = new StringTokenizer(fileVariableDirString, File.pathSeparator);
         while (st.hasMoreTokens()) {
             String token = st.nextToken();

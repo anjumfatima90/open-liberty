@@ -97,7 +97,7 @@ class SystemConfiguration {
 
         ServiceReference<LibertyProcess> procRef = bc.getServiceReference(LibertyProcess.class);
         LibertyProcess libertyProcess = bc.getService(procRef);
-        ConfigVariableRegistry variableRegistry = new ConfigVariableRegistry(variableRegistryService, libertyProcess.getArgs(), bc.getDataFile("variableCacheData"), locationService);
+        ConfigVariableRegistry variableRegistry = new ConfigVariableRegistry(variableRegistryService, libertyProcess.getArgs(), bc.getDataFile("variableCacheData"), locationService, bc);
 
         MetaTypeRegistry metatypeRegistry = metatypeRegistryTracker.getService();
 
@@ -135,6 +135,7 @@ class SystemConfiguration {
             @Override
             public void restore() {
                 try {
+                    System.out.println("In restore: Going to reprocess config");
                     reprocessConfig();
                 } catch (ConfigUpdateException e) {
                     throw new RuntimeException(e);

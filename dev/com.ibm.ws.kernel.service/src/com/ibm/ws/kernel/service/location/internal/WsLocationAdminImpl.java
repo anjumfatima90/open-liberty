@@ -87,7 +87,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
     public static WsLocationAdminImpl createLocations(Map<String, Object> initProps) {
         if (instance == null) {
             SymbolRegistry.getRegistry().clear();
-            instance = new WsLocationAdminImpl(initProps);
+            instance = new WsLocationAdminImpl(null, initProps);
         }
 
         return instance;
@@ -104,7 +104,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
     public static WsLocationAdminImpl createLocations(BundleContext ctx) {
         if (instance == null) {
             SymbolRegistry.getRegistry().clear();
-            instance = new WsLocationAdminImpl(new BundleContextMap(ctx));
+            instance = new WsLocationAdminImpl(ctx, new BundleContextMap(ctx));
         }
 
         return instance;
@@ -230,8 +230,7 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
      * @throws IllegalStateException
      *                                      if bootstrap library location or instance root don't exist.
      */
-    protected WsLocationAdminImpl(Map<String, Object> config) {
-        BundleContext bundleContext = FrameworkUtil.getBundle(getClass()).getBundleContext();
+    protected WsLocationAdminImpl(BundleContext ctx, Map<String, Object> config) {
         String userRootStr = (String) config.get(WsLocationConstants.LOC_USER_DIR);
         String serverCfgDirStr = (String) config.get(WsLocationConstants.LOC_SERVER_CONFIG_DIR);
         String serverOutDirStr = (String) config.get(WsLocationConstants.LOC_SERVER_OUTPUT_DIR);
@@ -343,15 +342,18 @@ public class WsLocationAdminImpl implements WsLocationAdmin {
         String variableSourceDirs = (String) config.get(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS);
         SymbolRegistry.getRegistry().addStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, variableSourceDirs);
 
-        bundleContext.registerService(CheckpointHookFactory.class, (p) -> new CheckpointHook() {
-            @Override
-            public void restore() {
-                String newVariableSourceDirs = getEnv(BootstrapConstants.ENV_VARIABLE_SOURCE_DIRS);
-                if (!newVariableSourceDirs.equals(variableSourceDirs)) {
-                    SymbolRegistry.getRegistry().replaceStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, newVariableSourceDirs);
-                }
-            };
-        }, null);
+        if (ctx != null) {
+            ctx.registerService(CheckpointHookFactory.class, (p) -> new CheckpointHook() {
+                @Override
+                public void restore() {
+                    System.out.println("In restore: In WsLocationadminImpl");
+                    String newVariableSourceDirs = getEnv(BootstrapConstants.ENV_VARIABLE_SOURCE_DIRS);
+                    if (!newVariableSourceDirs.equals(variableSourceDirs)) {
+                        SymbolRegistry.getRegistry().replaceStringSymbol(WsLocationConstants.LOC_VARIABLE_SOURCE_DIRS, newVariableSourceDirs);
+                    }
+                };
+            }, null);
+        }
     }
 
     String getEnv(final String key) {
