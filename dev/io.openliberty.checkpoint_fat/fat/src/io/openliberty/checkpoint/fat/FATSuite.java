@@ -27,7 +27,8 @@ import componenttest.topology.impl.LibertyServer;
                 TestWithFATServlet2.class,
                 LogsVerificationTest.class,
                 OSGiConsoleTest.class,
-                TestMPConfigServlet.class
+                TestMPConfigServlet.class,
+                TestEJBServlet.class
 })
 public class FATSuite {
     public static void copyAppsAppToDropins(LibertyServer server, String appName) throws Exception {
