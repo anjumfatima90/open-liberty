@@ -15,9 +15,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.After;
@@ -51,7 +55,6 @@ public class MPConfigTest extends FATServletClient {
 
     public TestMethod testMethod;
 
-    private static final Properties serverEnvProperties = new Properties();
     private static File serverEnvFile;
 
     @BeforeClass
@@ -89,16 +92,34 @@ public class MPConfigTest extends FATServletClient {
             case configObjectPropertiesAppScopeEnvValueChangeTest:
                 configureEnvVariable("config_object_properties_app_scope_key", "envValue");
                 break;
+            case configPropertiesEnvValueChangeTest:
+                Map<String, String> map = new HashMap<>();
+                map.put("checkpoint.config_properties_key1", "envValue");
+                map.put("checkpoint.config_properties_key2", "envValue");
+                configureEnvVariables(map);
+                break;
             default:
                 break;
         }
     }
 
+    private void configureEnvVariables(Map<String, String> variables) throws Exception {
+        Properties serverEnvProperties = new Properties();
+        for (Map.Entry<String, String> variable : variables.entrySet()) {
+            serverEnvProperties.put(variable.getKey(), variable.getValue());
+        }
+        writeServerEnvFile(serverEnvProperties);
+    }
+
     private void configureEnvVariable(String key, String value) throws Exception {
-        serverEnvProperties.clear();
+        Properties serverEnvProperties = new Properties();
         if (key != null && value != null) {
             serverEnvProperties.put(key, value);
         }
+        writeServerEnvFile(serverEnvProperties);
+    }
+
+    private void writeServerEnvFile(Properties serverEnvProperties) throws Exception, IOException, FileNotFoundException {
         serverEnvFile = new File(server.getFileFromLibertyServerRoot("server.env").getAbsolutePath());
         try (OutputStream out = new FileOutputStream(serverEnvFile)) {
             serverEnvProperties.store(out, "");
@@ -168,11 +189,30 @@ public class MPConfigTest extends FATServletClient {
                     updateVariableConfig("early_access_app_scope_key", "serverValue");
                     break;
 
+                // ConfigPropertiesBean
+                case configPropertiesEnvValueTest:
+                    Map<String, String> envMap = new HashMap<>();
+                    envMap.put("checkpoint.config_properties_key1", "envValue");
+                    envMap.put("checkpoint.config_properties_key2", "envValue");
+                    configureEnvVariables(envMap);
+                    break;
+                case configPropertiesServerValueTest:
+                    updateVariableConfig("checkpoint.config_properties_key1", "serverValue");
+                    updateVariableConfig("checkpoint.config_properties_key2", "serverValue");
+                    break;
+                case configPropertiesEnvValueChangeTest:
+                    Map<String, String> envChangeMap = new HashMap<>();
+                    envChangeMap.put("checkpoint.config_properties_key1", "envValueChange");
+                    envChangeMap.put("checkpoint.config_properties_key2", "envValueChange");
+                    configureEnvVariables(envChangeMap);
+                    break;
+
                 // Default tests in all beans
                 case defaultValueTest:
                 case appScopeDefaultValueTest:
                 case configObjectAppScopeDefaultValueTest:
                 case configObjectPropertiesAppScopeDefaultValueTest:
+                case configPropertiesDefaultValueTest:
                     // Just fall through and do the default (no configuration change)
                     // should use the defaultValue from server.xml
                 default:
@@ -234,7 +274,7 @@ public class MPConfigTest extends FATServletClient {
             case configObjectAppScopeServerValueTest:
             case configObjectAppScopeAnnoValueTest:
             case configObjectAppScopeEnvValueChangeTest:
-                assertNotNull("CWWKC0651W message expected in logs", server
+                assertNotNull("CWWKC0651W message for config_object_app_scope_key expected in logs", server
                                 .waitForStringInLog("CWWKC0651W:.*config_object_app_scope_key*"));
                 server.stopServer("CWWKC0651W");
                 break;
@@ -243,15 +283,26 @@ public class MPConfigTest extends FATServletClient {
             case configObjectPropertiesAppScopeEnvValueTest:
             case configObjectPropertiesAppScopeServerValueTest:
             case configObjectPropertiesAppScopeEnvValueChangeTest:
-                assertNotNull("CWWKC0651W message expected in logs", server
+                assertNotNull("CWWKC0651W message for config_object_properties_app_scope_key expected in logs", server
                                 .waitForStringInLog("CWWKC0651W:.*config_object_properties_app_scope_key*"));
                 server.stopServer("CWWKC0651W");
                 break;
 
             // ApplicationScopedOnCheckpointBean bean
             case applicationScopedValueTest:
-                assertNotNull("CWWKC0651W message expected in logs", server
+                assertNotNull("CWWKC0651W message for early_access_app_scope_key expected in logs", server
                                 .waitForStringInLog("CWWKC0651W:.*early_access_app_scope_key*"));
+                server.stopServer("CWWKC0651W");
+                break;
+
+            // ConfigPropertiesBean
+            case configPropertiesEnvValueTest:
+            case configPropertiesServerValueTest:
+            case configPropertiesEnvValueChangeTest:
+                assertNotNull("CWWKC0651W message for checkpoint.config_properties_key1 expected in logs", server
+                                .waitForStringInLog("CWWKC0651W:.*checkpoint.config_properties_key1*"));
+                assertNotNull("CWWKC0651W message for checkpoint.config_properties_key2 expected in logs", server
+                                .waitForStringInLog("CWWKC0651W:.*checkpoint.config_properties_key2*"));
                 server.stopServer("CWWKC0651W");
                 break;
 
@@ -260,6 +311,7 @@ public class MPConfigTest extends FATServletClient {
             case appScopeDefaultValueTest:
             case configObjectAppScopeDefaultValueTest:
             case configObjectPropertiesAppScopeDefaultValueTest:
+            case configPropertiesDefaultValueTest:
                 assertNull("CWWKC0651W message not expected in logs", server
                                 .waitForStringInLog("CWWKC0651W:.*"));
                 server.stopServer();
@@ -298,6 +350,10 @@ public class MPConfigTest extends FATServletClient {
         configObjectPropertiesAppScopeEnvValueChangeTest,
         configObjectPropertiesAppScopeServerValueTest,
         configObjectPropertiesAppScopeDefaultValueTest,
+        configPropertiesDefaultValueTest,
+        configPropertiesEnvValueTest,
+        configPropertiesEnvValueChangeTest,
+        configPropertiesServerValueTest,
         unknown
     }
 }

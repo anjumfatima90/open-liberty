@@ -20,9 +20,10 @@
     
     <include location="../fatTestPorts.xml"/>
 
-    <variable name="req_scope_key" defaultValue="defaultValue" />
-    <variable name="app_scope_key" defaultValue="defaultValue" />
-    <variable name="config_object_app_scope_key" defaultValue="defaultValue" />
-    <variable name="config_object_properties_app_scope_key" defaultValue="defaultValue" />
-    <variable name="early_access_app_scope_key" defaultValue="defaultValue" />
+    <variable name="req_scope_key" value="defaultValue" />
+    <variable name="app_scope_key" value="defaultValue" />
+    <variable name="config_object_app_scope_key" value="defaultValue" />
+    <variable name="config_object_properties_app_scope_key" value="defaultValue" />
+    <variable name="early_access_app_scope_key" value="defaultValue" />
+    <variable name="checkpoint.config_properties_key1" value="defaultValue" />
 </server>
