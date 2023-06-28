@@ -91,7 +91,8 @@ import componenttest.topology.impl.LibertyServer;
                 MapCacheTest.class,
                 WebCacheTest.class,
                 XMLbindingsTest.class,
-                WebProfileJSPtest.class
+                WebProfileJSPtest.class,
+                CRaCServletTest.class
 })
 
 public class FATSuite {

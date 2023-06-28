@@ -50,6 +50,7 @@ addRequiredLibraries {
 }
 
 dependencies {
+  requiredLibs project(':io.openliberty.org.crac')
   requiredLibs project(':com.ibm.ws.security.fat.common.jwt')
   requiredLibs project(':io.openliberty.mpTelemetry.1.0.thirdparty')
   requiredLibs 'org.glassfish:javax.json:1.1'
