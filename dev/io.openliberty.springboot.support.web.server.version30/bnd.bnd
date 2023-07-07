@@ -55,7 +55,8 @@ Provide-Capability: spring.boot.support; jars:List<String>=springBoot30Server.ja
 	com.ibm.ws.adaptable.module;version=latest,\
 	com.ibm.ws.container.service;version=latest,\
 	com.ibm.ws.threading;version=latest,\
-	com.ibm.ws.springboot.support.web.server.jakarta;version=latest
+	com.ibm.ws.springboot.support.web.server.jakarta;version=latest,\
+	com.ibm.ws.kernel.boot.common;version=latest
 
 -testpath: \
 	../build.sharedResources/lib/junit/old/junit.jar;version=file, \

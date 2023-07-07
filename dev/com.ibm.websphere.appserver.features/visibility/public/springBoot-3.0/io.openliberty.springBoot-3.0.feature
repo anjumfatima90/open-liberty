@@ -11,3 +11,4 @@ Subsystem-Name: Spring Boot Support 3.0
 -bundles=io.openliberty.java17.internal
 kind=beta
 edition=core
+WLP-InstantOn-Enabled: true
