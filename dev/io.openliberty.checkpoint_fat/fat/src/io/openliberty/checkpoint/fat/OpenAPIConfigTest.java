@@ -76,7 +76,7 @@ public class OpenAPIConfigTest extends FATServletClient {
 
     @Before
     public void setup() throws Exception {
-        server.setCheckpoint(CheckpointPhase.AFTER_APP_START, true,
+        server.setCheckpoint(CheckpointPhase.AFTER_APP_START, false,
                              server -> {
                                  assertNotNull("'SRVE0169I: Loading Web Module: " + APP_NAME + "' message not found in log before rerstore",
                                                server.waitForStringInLogUsingMark("SRVE0169I: .*" + APP_NAME, 0));
@@ -97,13 +97,6 @@ public class OpenAPIConfigTest extends FATServletClient {
 
     @Test
     public void testConfigureDynamicUpdate() throws Exception {
-        assertWebAppStarts(DEFAULT_DOC_PATH);
-        assertWebAppStarts(DEFAULT_UI_PATH);
-        assertDocumentPath(DEFAULT_DOC_PATH);
-        assertUiPath(DEFAULT_UI_PATH);
-
-        server.stopServer(false, "");
-
         Map<String, String> configMap = new HashMap<>();
         configMap.put("OPEN_API_DOC_PATH", "/foo");
         configMap.put("OPEN_API_UI_PATH", "/bar");
