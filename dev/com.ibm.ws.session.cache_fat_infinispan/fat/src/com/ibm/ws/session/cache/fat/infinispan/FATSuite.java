@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 IBM Corporation and others.
+ * Copyright (c) 2018, 2024 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-2.0/
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
@@ -24,6 +24,9 @@ import org.junit.runners.Suite.SuiteClasses;
 import com.ibm.websphere.simplicity.Machine;
 import com.ibm.websphere.simplicity.log.Log;
 
+import componenttest.rules.repeater.FeatureReplacementAction;
+import componenttest.rules.repeater.JakartaEE10Action;
+import componenttest.rules.repeater.JakartaEE9Action;
 import componenttest.topology.impl.LibertyFileManager;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServerFactory;
@@ -35,11 +38,17 @@ import componenttest.topology.utils.HttpUtils;
                 SessionCacheOneServerTest.class,
                 SessionCacheTwoServerTest.class,
                 SessionCacheTimeoutTest.class,
-                SessionCacheTwoServerTimeoutTest.class
-                // A separate test suite covers Infinispan client/server scenarios
+                SessionCacheTwoServerTimeoutTest.class,
+                CheckpointSessionCacheOneServerTest.class,
+                CheckpointSessionCacheTwoServerTest.class,
+                CheckpointSessionCacheTwoServerTimeoutTest.class
+// A separate test suite covers Infinispan client/server scenarios
 })
 
 public class FATSuite {
+
+    public static final String CACHE_MANAGER_EE9_ID = JakartaEE9Action.ID + "_CacheManager";
+    public static final String CACHE_MANAGER_EE10_ID = JakartaEE10Action.ID + "_CacheManager";
 
     @BeforeClass
     public static void beforeSuite() throws Exception {
@@ -78,5 +87,19 @@ public class FATSuite {
         } finally {
             con.disconnect();
         }
+    }
+
+    public static FeatureReplacementAction checkpointRepeatActionEE9(FeatureReplacementAction action, String ID, String[] servers) {
+        return action.removeFeature("mpMetrics-5.1")
+                        .addFeature("mpMetrics-4.0")
+                        .withID(ID)
+                        .forServers(servers);
+    }
+
+    public static FeatureReplacementAction checkpointRepeatActionEE10(FeatureReplacementAction action, String ID, String[] servers) {
+        return action.removeFeature("mpMetrics-4.0")
+                        .addFeature("mpMetrics-5.1")
+                        .withID(ID)
+                        .forServers(servers);
     }
 }
