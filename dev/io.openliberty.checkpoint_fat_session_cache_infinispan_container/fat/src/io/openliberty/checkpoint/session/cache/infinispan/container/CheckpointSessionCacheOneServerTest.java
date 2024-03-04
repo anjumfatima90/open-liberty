@@ -90,9 +90,11 @@ public class CheckpointSessionCacheOneServerTest extends FATServletClient {
         Map<String, String> options = server.getJvmOptionsAsMap();
         options.put("-Dsession.cache.config.file", sessionCacheConfigFile);
         server.setJvmOptions(options);
-        updateVariableConfig(server, "INF_SERVERLIST", infinispan.getHost() + ":" + infinispan.getMappedPort(11222));
-        server.setCheckpoint(CheckpointPhase.AFTER_APP_START, true, null);
+//        updateVariableConfig(server, "INF_SERVERLIST", infinispan.getHost() + ":" + infinispan.getMappedPort(11222));
+        server.setCheckpoint(CheckpointPhase.AFTER_APP_START, false, null);
         server.startServer();
+        updateVariableConfig(server, "INF_SERVERLIST", infinispan.getHost() + ":" + infinispan.getMappedPort(11222));
+        server.checkpointRestore();
 
     }
 
