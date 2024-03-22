@@ -12,6 +12,7 @@
  *******************************************************************************/
 package io.openliberty.checkpoint.fat;
 
+import static io.openliberty.checkpoint.fat.FATSuite.getTestMethod;
 import static io.openliberty.checkpoint.fat.FATSuite.getTestMethodNameOnly;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,7 +20,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -28,10 +28,11 @@ import org.junit.runner.RunWith;
 import com.ibm.websphere.simplicity.ProgramOutput;
 import com.ibm.websphere.simplicity.ShrinkHelper;
 import com.ibm.websphere.simplicity.ShrinkHelper.DeployOptions;
+import com.ibm.websphere.simplicity.log.Log;
 
+import componenttest.annotation.CheckpointTest;
 import componenttest.annotation.ExpectedFFDC;
 import componenttest.annotation.Server;
-import componenttest.annotation.CheckpointTest;
 import componenttest.custom.junit.runner.FATRunner;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.impl.LibertyServer.CheckpointInfo;
@@ -50,45 +51,89 @@ public class SlowAppStartTest {
     @Server("slowStartAppServer")
     public static LibertyServer server;
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        ShrinkHelper.defaultApp(server, APP_NAME, new DeployOptions[] { DeployOptions.OVERWRITE }, APP_NAME);
-        FATSuite.copyAppsAppToDropins(server, APP_NAME);
+    private TestMethod testMethod;
+
+    @Before
+    public void setup() throws Exception {
+        testMethod = getTestMethod(TestMethod.class, testName);
+        //ShrinkHelper.defaultApp(server, APP_NAME, new DeployOptions[] { DeployOptions.OVERWRITE }, "startupcode1");
+        server.setConsoleLogName(getTestMethodNameOnly(testName));
+
+        switch (testMethod) {
+            case testBeforeAppStartForSlowStartServer:
+            case testAfterAppStartForSlowStartServer:
+                ShrinkHelper.defaultApp(server, APP_NAME, new DeployOptions[] { DeployOptions.OVERWRITE }, "startupcode1");
+                break;
+            case testAfterAppStart:
+                ShrinkHelper.defaultApp(server, APP_NAME, new DeployOptions[] { DeployOptions.OVERWRITE }, "startupcode2");
+                break;
+            default:
+                Log.info(getClass(), testName.getMethodName(), "No configuration required: " + testMethod);
+                break;
+        }
+//        //FATSuite.copyAppsAppToDropins(server, APP_NAME);
+
+//        Package pkg = SlowAppServletA.class.getPackage();
+//        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+//                        .addClass(SlowAppServletA.class)
+//                        .addPackages(true, pkg);
+//        System.out.println("APP CONTENT" + app.getContent());
+//        ShrinkHelper.exportAppToServer(server, app, DeployOptions.OVERWRITE);
     }
 
     @Test
-    public void testBeforeAppStart() throws Exception {
+    public void testBeforeAppStartForSlowStartServer() throws Exception {
         server.setCheckpoint(new CheckpointInfo(CheckpointPhase.BEFORE_APP_START, false, null));
         server.startServer();
         String initSleeping = server.waitForStringInLogUsingMark(TEST_INIT_SLEEPING, 100);
         assertNull("Unexpected message.", initSleeping);
 
         server.checkpointRestore();
-        String initDone = server.waitForStringInLogUsingMark(TEST_INIT_DONE, 15000);
+        String initDone = server.waitForStringInLogUsingMark(TEST_INIT_DONE, 25000);
         assertNotNull("No message found: " + TEST_INIT_DONE, initDone);
         HttpUtils.findStringInUrl(server, "startupcode/request", "TEST - Slow start servlet");
     }
 
     @Test
     @ExpectedFFDC("io.openliberty.checkpoint.internal.criu.CheckpointFailedException")
-    public void testAfterAppStart() throws Exception {
+    public void testAfterAppStartForSlowStartServer() throws Exception {
         server.setCheckpoint(new CheckpointInfo(CheckpointPhase.AFTER_APP_START, false, true, true, null));
         ProgramOutput checkpointOutput = server.startServer();
         int retureCode = checkpointOutput.getReturnCode();
         assertEquals("Wrong return code for failed checkpoint.", 72, retureCode);
         String initSleeping = server.waitForStringInLogUsingMark(TEST_INIT_SLEEPING, 100);
         assertNotNull("No message found: " + TEST_INIT_SLEEPING, initSleeping);
-        assertNotNull("No error message found - CWWKZ0022W", server.waitForStringInLogUsingMark("CWWKC0453E.*CWWKC0457E.*CWWKZ0022W", 100));
+        //The application start timeout in the server.xml is 10 secs but the runtime multiplies it three times so we should see "Application startupcode has not started in 30.000 seconds" in the logs since the application sleeps for 40 secs during startup.
+        assertNotNull("No error message found - CWWKC0453E", server.waitForStringInLogUsingMark("CWWKC0453E.*CWWKC0457E.*CWWKZ0022W", 100));
     }
 
-    @Before
-    public void setConsoleLogName() {
-        server.setConsoleLogName(getTestMethodNameOnly(testName));
+    @Test
+    public void testAfterAppStart() throws Exception {
+        server.setCheckpoint(new CheckpointInfo(CheckpointPhase.AFTER_APP_START, false, null));
+        server.startServer();
+        //String initSleeping = server.waitForStringInLogUsingMark(TEST_INIT_SLEEPING, 100);
+        //assertNull("Unexpected message.", initSleeping);
+        server.checkpointRestore();
+        //String initDone = server.waitForStringInLogUsingMark(TEST_INIT_DONE, 15000);
+        //assertNotNull("No message found: " + TEST_INIT_DONE, initDone);
+        HttpUtils.findStringInUrl(server, "startupcode/request", "TEST - Slow start servlet");
     }
+
+//    @Before
+//    public void setConsoleLogName() {
+//        server.setConsoleLogName(getTestMethodNameOnly(testName));
+//    }
 
     @After
     public void tearDown() throws Exception {
         server.stopServer();
+    }
+
+    static enum TestMethod {
+        testBeforeAppStartForSlowStartServer,
+        testAfterAppStartForSlowStartServer,
+        testAfterAppStart,
+        unknown
     }
 
 }

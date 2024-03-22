@@ -28,6 +28,8 @@ import com.ibm.ws.app.manager.internal.AppManagerConstants;
 import com.ibm.ws.app.manager.internal.ApplicationConfigurator;
 import com.ibm.wsspi.kernel.service.utils.FrameworkState;
 
+import io.openliberty.checkpoint.spi.CheckpointPhase;
+
 /**
  *
  */
@@ -82,9 +84,13 @@ public final class ApplicationStateCoordinator {
             waitForStartingAppPidsLatch.countDown();
         }
     }
-
+    
     public static void setApplicationStartTimeout(long applicationStarttimeout) {
-        startTimeout = applicationStarttimeout;
+        if (!CheckpointPhase.getPhase().restored()) {
+            startTimeout = applicationStarttimeout * 3;
+        } else {
+            startTimeout = applicationStarttimeout;
+        }       
     }
 
     public static long getApplicationStartTimeout() {

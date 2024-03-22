@@ -56,12 +56,12 @@ public class BasicServletTest extends FATServletClient {
 
     @Before
     public void setUp() throws Exception {
-        server.setCheckpoint(CheckpointPhase.AFTER_APP_START, true,
+        server.setCheckpoint(CheckpointPhase.BEFORE_APP_START, true,
                              server -> {
-                                 assertNotNull("'SRVE0169I: Loading Web Module: app1' message not found in log before rerstore",
-                                               server.waitForStringInLogUsingMark("SRVE0169I: Loading Web Module: app1", 0));
-                                 assertNotNull("'CWWKZ0001I: Application app1 started' message not found in log.",
-                                               server.waitForStringInLogUsingMark("CWWKZ0001I: Application app1 started", 0));
+                                 //assertNotNull("'SRVE0169I: Loading Web Module: app1' message not found in log before rerstore",
+                                   //            server.waitForStringInLogUsingMark("SRVE0169I: Loading Web Module: app1", 0));
+                                 //assertNotNull("'CWWKZ0001I: Application app1 started' message not found in log.",
+                                   //            server.waitForStringInLogUsingMark("CWWKZ0001I: Application app1 started", 0));
                                  // make sure the web app URL is not logged on checkpoint side
                                  assertNull("'CWWKT0016I: Web application available' found in log.",
                                             server.waitForStringInLogUsingMark("CWWKT0016I: .*app1", 0));

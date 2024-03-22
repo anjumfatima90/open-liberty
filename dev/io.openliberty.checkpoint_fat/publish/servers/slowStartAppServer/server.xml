@@ -19,5 +19,6 @@
     
     <include location="../fatTestPorts.xml"/>
     
+    <webApplication location="startupcode.war"/>
     <variable name="VARIABLE_SOURCE_DIRS" defaultValue="defaultSrcDir" />
 </server>
