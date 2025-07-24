@@ -41,6 +41,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
@@ -54,6 +56,7 @@ import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.app.manager.springboot.container.ApplicationError;
 import com.ibm.ws.app.manager.springboot.container.ApplicationTr.Type;
 import com.ibm.ws.common.crypto.CryptoUtils;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 
 /**
  * A utility class for thinning an uber jar by separating application code in a separate jar
@@ -430,7 +433,8 @@ public class SpringBootThinUtil implements Closeable {
             if (version.get() == null || container.get() == null) {
                 String path = entry;
                 if (version.get() == null && path.contains("BOOT-INF/lib/spring-boot-") && path.endsWith(".jar")) {
-                    version.set(path.substring(path.lastIndexOf("-") + 1, path.lastIndexOf(".")));
+                    String extractedVersion = extractVersion(path);
+                    version.set(extractedVersion);
                 } else if (container.get() == null) {
                     for (Container c : Container.values()) {
                         if (path.contains(c.getCoreContainerJar()) && path.endsWith(".jar")) {
@@ -476,6 +480,16 @@ public class SpringBootThinUtil implements Closeable {
         String springBootStarter = (starterRef.get() != null) ? starterRef.get() : THE_UNKNOWN_STARTER;
         Set<String> starterArtifactIds = EmbeddedContainer.getStarterArtifactIds(springBootStarter);
         return new StarterFilter(springBootStarter, starterArtifactIds);
+    }
+
+    private static String extractVersion(String path) {
+        String version = "";
+        String regex = "(\\d+\\.\\d+\\.+\\d+)";
+        Matcher m = Pattern.compile(regex).matcher(path);
+        if (m.find()) {
+            version = m.group(1);
+        }
+        return version;
     }
 
     static class PreThinnedApp {
@@ -811,7 +825,13 @@ public class SpringBootThinUtil implements Closeable {
                                                                                            "org.apache.tomcat.embed:tomcat-embed-core:jar:10.1.42:compile",
                                                                                            "org.apache.tomcat.embed:tomcat-embed-el:jar:10.1.42:compile",
                                                                                            "org.apache.tomcat.embed:tomcat-embed-websocket:jar:10.1.42:compile");
-
+        private final static List<String> mvnSpringBoot40TomcatStarterDeps = Arrays.asList(
+                                                                                           "org.springframework.boot:spring-boot-starter-tomcat:jar:4.0.0-M1:compile",
+                                                                                           "org.springframework.boot:spring-boot-tomcat:jar:4.0.0-M1:compile",
+                                                                                           "org.apache.tomcat.embed:tomcat-embed-core:jar:11.0.9:compile",
+                                                                                           "jakarta.annotation:jakarta.annotation-api:jar:3.0.0:compile",
+                                                                                           "org.apache.tomcat.embed:tomcat-embed-el:jar:11.0.9:compile",
+                                                                                           "org.apache.tomcat.embed:tomcat-embed-websocket:jar:11.0.9:compile");
         // Jetty
 
         private final static List<String> mvnSpringBoot15JettyStarterDeps = Arrays.asList(
@@ -1600,6 +1620,7 @@ public class SpringBootThinUtil implements Closeable {
             theMap.put(starterJarNamePrefix(TOMCAT, "3.3"), loadStarterMvnDeps(mvnSpringBoot33TomcatStarterDeps));
             theMap.put(starterJarNamePrefix(TOMCAT, "3.4"), loadStarterMvnDeps(mvnSpringBoot34TomcatStarterDeps));
             theMap.put(starterJarNamePrefix(TOMCAT, "3.5"), loadStarterMvnDeps(mvnSpringBoot35TomcatStarterDeps));
+            theMap.put(starterJarNamePrefix(TOMCAT, "4.0"), loadStarterMvnDeps(mvnSpringBoot40TomcatStarterDeps));
 
             theMap.put(starterJarNamePrefix(JETTY, "1.5"), loadStarterMvnDeps(mvnSpringBoot15JettyStarterDeps));
             theMap.put(starterJarNamePrefix(JETTY, "2.0"), loadStarterMvnDeps(mvnSpringBoot20JettyStarterDeps));
