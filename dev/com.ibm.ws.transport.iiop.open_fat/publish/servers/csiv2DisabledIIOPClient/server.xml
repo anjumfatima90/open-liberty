@@ -1,0 +1,26 @@
+<server>
+    <include location="../fatTestCommon.xml"/>
+    <featureManager>
+        <feature>servlet-3.1</feature>
+        <feature>concurrent-1.0</feature>
+        <feature>test.iiop.client-1.0</feature>
+        <feature>test.user.feature-1.0</feature>
+        <feature>componentTest-1.0</feature>
+        <feature>appSecurity-2.0</feature>
+    </featureManager>
+    <!-- HTTP_default (8010) so the FAT framework's getHttpDefaultPort() routes @TestServlet requests here -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="${bvt.prop.HTTP_default}"
+                  httpsPort="${bvt.prop.HTTP_default.secure}"/>
+    <!--
+        The client ORB bootstraps CosNaming via the SSL port on csiv2SslOnlyServer.
+        iiopPort=-1 means there is no plain IIOP socket, only the SSL acceptor on
+        iiopsPort. We point nameService at corbaloc:iiop:localhost:<iiopsPort>/NameService
+        so Yoko connects there and CSIv2 upgrades the connection to SSL automatically.
+    -->
+    <orb id="defaultOrb"
+         nameService="corbaname:iiop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService" />
+    <quickStartSecurity userName="Bob" userPassword="bobpwd"/>
+    <keyStore id="defaultKeyStore" password="passw0rd"/>
+</server>

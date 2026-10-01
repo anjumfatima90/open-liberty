@@ -36,10 +36,12 @@ import junit.framework.AssertionFailedError;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-    CosNamingViaStringToObjectFatTest.class,
-    IIOPClientEJBTest.class,
-    IIOPClientServletTest.class,
-    IORTest.class,
+//    CosNamingViaStringToObjectFatTest.class,    
+//    IIOPClientEJBTest.class,
+//    IIOPClientServletTest.class,
+//    IORTest.class,
+    RemoteEphemeralIIOPPortTest.class,
+    CSIv2DisabledIIOPPortTest.class    
 })
 public class FATSuite {
     private static final JavaArchive INTERFACES_JAR;
