@@ -21,6 +21,13 @@
     username = ${def;artifactory.upload.user}; \
     password = ${def;artifactory.upload.token}, \
   -bnd
+  
+-plugin.0.oss_dep_staging: \
+  aQute.bnd.repository.maven.provider.MavenBndRepository; \
+    name='DependencyTestStaging'; \
+    local = ${workspace}/cnf/staging/repository; \
+    index = ${workspace}/cnf/staging/dependencies_index.maven; \
+    readonly=true
 
 -plugin.1.Local: \
   aQute.bnd.repository.maven.provider.MavenBndRepository; \
