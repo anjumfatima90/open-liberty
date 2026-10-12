@@ -37,7 +37,7 @@ public class ClientSupportStubRegisterer {
     private static enum MyLocalFactory implements LocalFactory {
         INSTANCE;
         public Class<?> forName(String name) throws ClassNotFoundException {
-            return Class.forName(name);
+            return Class.forName(name, false, ClientSupportStubRegisterer.class.getClassLoader());
         }
         public Object newInstance(Class cls) throws InstantiationException, IllegalAccessException {
             return null;

@@ -12,6 +12,7 @@
  */
 package test.corba.remote.war;
 
+import java.util.Collections;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.omg.CORBA.ORB;
+import org.omg.IIOP.ProfileBody_1_1;
 
 import componenttest.app.FATServlet;
 import shared.Business;
@@ -28,21 +30,27 @@ import shared.ClientUtil;
 import shared.TestRemote;
 
 /**
- * Client servlet that runs on csiv2SslOnlyClient and invokes EJBs hosted on
- * csiv2SslOnlyServer, which is configured with iiopPort="-1" and iiopsPort only.
+ * Client servlet that runs on csiv2DisabledIIOPClient and invokes EJBs hosted on
+ * csiv2DisabledIIOPServer, which is configured with iiopPort="-1" and iiopsPort only.
  *
  * The EJB server opens no plain IIOP socket at all — only a TLS/SSL socket on
  * iiopsPort. This servlet's ORB is pre-configured in server.xml to bootstrap
  * the CosNaming service over SSL:
  *
- *   &lt;orb nameService="corbaloc:iiop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService"/&gt;
+ *   &lt;orb nameService="corbaname:ssliop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService"/&gt;
  *
  * This proves that a remote CSIv2-capable client can reach an EJB published on
- * an SSL-only server (iiopPort=-1), and that plain IIOP is completely disabled.
+ * an SSL-only server (iiopPort=-1).
+ *
+ * The expected iiopsPort is passed in by the FAT test class as the system property
+ * {@value #SSL_PORT_PROPERTY} (set through the client server's jvm.options).
  */
-@WebServlet("/CSIv2SslOnlyClientServlet")
+@WebServlet("/CSIv2DisabledIIOPServlet")
 @SuppressWarnings("serial")
 public class CSIv2DisabledIIOPServlet extends FATServlet {
+
+    /** System property holding the server's iiopsPort; set by CSIv2DisabledIIOPPortTest. */
+    public static final String SSL_PORT_PROPERTY = "csiv2.expected.iiops.port";
 
     @Resource
     private ORB orb;
@@ -85,10 +93,9 @@ public class CSIv2DisabledIIOPServlet extends FATServlet {
     }
 
     /**
-     * Verify the IOR the SSL client receives contains zero plain TAG_INTERNET_IOP
-     * profiles — confirming that the server's --no-profile flag on the SSL acceptor
-     * suppressed all plain profiles, and the connection succeeded via SSL transport
-     * negotiation rather than a plain IIOP profile.
+     * Verify the IOR the SSL client receives contains exactly one IIOP profile.
+     * With iiopPort=-1 no plain IIOP port is published, so the single profile
+     * only acts as the carrier for the CSIv2 security component.
      */
     @Test
     public void testSslEjbIorProfiles() throws Exception {
@@ -96,7 +103,24 @@ public class CSIv2DisabledIIOPServlet extends FATServlet {
         final int numProfiles = ClientUtil.getNumProfiles((Stub) bean, orb);
         System.out.printf("### CSIv2 SSL-only IOR profile count: %d%n", numProfiles);
         Assert.assertEquals(
-                "IOR must contain zero plain TAG_INTERNET_IOP profiles when iiopPort=-1 with CSIv2",
-                0, numProfiles);
+                "IOR must contain exactly one IIOP profile when iiopPort=-1 with CSIv2",
+                1, numProfiles);
+    }
+
+    /**
+     * Verify the content of the single IIOP profile: its plain port must be 0 (no
+     * plain IIOP endpoint is advertised) and the CSIv2 TAG_CSI_SEC_MECH_LIST component
+     * must advertise exactly one TLS transport address, the server's iiopsPort.
+     */
+    @Test
+    public void testSslEjbIorAdvertisesOnlySslPort() throws Exception {
+        final int expectedSslPort = Integer.parseInt(System.getProperty(SSL_PORT_PROPERTY));
+        TestRemote bean = ClientUtil.lookupTestBean(orb);
+        ProfileBody_1_1 profile = ClientUtil.getIiopProfile((Stub) bean, orb);
+        System.out.printf("### CSIv2 SSL-only IOR profile: host=%s port=%d%n", profile.host, profile.port & 0xFFFF);
+        Assert.assertEquals("The plain IIOP port in the IOR profile must be 0 when iiopPort=-1",
+                            0, profile.port & 0xFFFF);
+        Assert.assertEquals("The CSIv2 component must advertise only the iiopsPort as TLS transport address",
+                            Collections.singletonList(expectedSslPort), ClientUtil.getCsiv2SslPorts(profile, orb));
     }
 }

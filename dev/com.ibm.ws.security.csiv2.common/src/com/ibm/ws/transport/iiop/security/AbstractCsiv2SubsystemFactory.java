@@ -59,10 +59,15 @@ public abstract class AbstractCsiv2SubsystemFactory implements SubsystemFactory 
 
         @Override
         public Class<?> forName(String clsName) throws ClassNotFoundException {
-            return Class.forName(clsName);
+            // Use this class's own classloader explicitly so that classes from
+            // com.ibm.ws.security.csiv2.common (e.g. SocketFactory) are visible
+            // even when forName() is called from within a different OSGi bundle
+            // (such as io.openliberty.yoko.osgi's ProviderRegistryImpl).
+            return Class.forName(clsName, false, AbstractCsiv2SubsystemFactory.class.getClassLoader());
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public Object newInstance(Class cls) throws InstantiationException, IllegalAccessException {
             return cls.newInstance();
         }
@@ -128,6 +133,23 @@ public abstract class AbstractCsiv2SubsystemFactory implements SubsystemFactory 
         providerRegistry.unregisterProvider(securityInitializerClass);
         providerRegistry.unregisterProvider(connectionHelperClass);
         SecurityServices.clean();
+    }
+
+    private static final String IIOP_CONNECTION_HELPER = "-IIOPconnectionHelper";
+
+    @Override
+    public void addClientORBInitArgs(Map<String, Object> clientProperties, List<String> args) {
+        // The client ORB must use SocketFactory (not DefaultSocketFactory) as its
+        // connection helper so that when Yoko follows a LOCATION_FORWARD to an IOR
+        // that carries a TAG_CSI_SEC_MECH_LIST component (SSL-only port, zero-port
+        // policy), ConFactory_impl.create_connectors() can call
+        // connectionHelper.getEndpoints() to extract the SSL TransportAddresses.
+        // Without this, ClientManager.getClientProfilePairs() finds no usable
+        // profile and throws TRANSIENT, causing corbaname:ssliop: lookups to fail.
+        if (!args.contains(IIOP_CONNECTION_HELPER)) {
+            args.add(IIOP_CONNECTION_HELPER);
+            args.add(SocketFactory.class.getName());
+        }
     }
 
     @Override

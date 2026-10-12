@@ -25,6 +25,20 @@
         <iiopsOptions iiopsPort="${bvt.prop.IIOP.secondary.secure}" sslRef="defaultSSLConfig"/>
     </iiopEndpoint>
     <quickStartSecurity userName="Bob" userPassword="bobpwd"/>
-    <keyStore id="defaultKeyStore" password="passw0rd"/>
-    <orb id="defaultOrb" orbSSLInitTimeout="60"/>
+    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" clientAuthenticationSupported="true"/>
+    <keyStore id="defaultKeyStore" password="{xor}EzY9Oi0rJg==" /> <!-- pwd: Liberty, expires1/4/2099 -->
+    <orb id="defaultOrb" orbSSLInitTimeout="60">
+        <serverPolicy.csiv2>
+            <layers>
+                <authenticationLayer establishTrustInClient="Supported" mechanisms="GSSUP"/>
+                <transportLayer sslRef="defaultSSLConfig"/>
+            </layers>
+        </serverPolicy.csiv2>
+        <clientPolicy.csiv2>
+            <layers>
+                <authenticationLayer establishTrustInClient="Supported" mechanisms="GSSUP"/>
+                <transportLayer sslRef="defaultSSLConfig"/>
+            </layers>
+        </clientPolicy.csiv2>
+    </orb>
 </server>

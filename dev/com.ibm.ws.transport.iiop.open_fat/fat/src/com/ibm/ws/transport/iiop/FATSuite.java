@@ -87,6 +87,7 @@ public class FATSuite {
         server.installSystemBundle("test.iiop");
         server.installSystemFeature("test.iiop-1.0");
         server.installSystemFeature("test.iiop.client-1.0");
+        server.installSystemFeature("test.iiop.secure.client-1.0");
     }
 
     @AfterClass
@@ -97,6 +98,7 @@ public class FATSuite {
         server.uninstallSystemBundle("test.iiop");
         server.uninstallSystemFeature("test.iiop-1.0");
         server.uninstallSystemFeature("test.iiop.client-1.0");
+        server.uninstallSystemFeature("test.iiop.secure.client-1.0");
     }
 
 }

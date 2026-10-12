@@ -3,7 +3,7 @@
     <featureManager>
         <feature>servlet-3.1</feature>
         <feature>concurrent-1.0</feature>
-        <feature>test.iiop.client-1.0</feature>
+        <feature>test.iiop.secure.client-1.0</feature>
         <feature>test.user.feature-1.0</feature>
         <feature>componentTest-1.0</feature>
         <feature>appSecurity-2.0</feature>
@@ -16,11 +16,20 @@
     <!--
         The client ORB bootstraps CosNaming via the SSL port on csiv2SslOnlyServer.
         iiopPort=-1 means there is no plain IIOP socket, only the SSL acceptor on
-        iiopsPort. We point nameService at corbaloc:iiop:localhost:<iiopsPort>/NameService
-        so Yoko connects there and CSIv2 upgrades the connection to SSL automatically.
+        iiopsPort.
     -->
     <orb id="defaultOrb"
-         nameService="corbaname:iiop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService" />
+         nameService="corbaname:ssliop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService">
+        <clientPolicy.clientContainerCsiv2>
+            <layers>
+                <!-- GSSUP is the default mechanism and needs credentials; these match the
+                     EJB server's quickStartSecurity (test-only values). -->
+                <authenticationLayer user="Bob" password="bobpwd"/>
+                <transportLayer sslRef="defaultSSLConfig"/>
+            </layers>
+        </clientPolicy.clientContainerCsiv2>
+    </orb>
     <quickStartSecurity userName="Bob" userPassword="bobpwd"/>
-    <keyStore id="defaultKeyStore" password="passw0rd"/>
+    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" clientAuthenticationSupported="true"/>
+    <keyStore id="defaultKeyStore" password="{xor}EzY9Oi0rJg==" /> <!-- pwd: Liberty, expires1/4/2099 -->
 </server>

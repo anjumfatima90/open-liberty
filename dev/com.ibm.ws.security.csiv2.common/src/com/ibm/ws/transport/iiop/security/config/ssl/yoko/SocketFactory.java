@@ -124,6 +124,8 @@ public class SocketFactory extends SocketFactoryHelper {
         // check for SSL addresses
         if (Util.isEncodedHost(host, HOST_PROTOCOL)) {
             String sslConfigName = Util.decodeHostInfo(host);
+            // empty string means "use default SSL config" (null triggers default factory)
+            if (sslConfigName != null && sslConfigName.isEmpty()) sslConfigName = null;
             host = Util.decodeHost(host);
             return createSSLSocket(host, (char) port, sslConfigName);
         } else {
@@ -500,6 +502,22 @@ public class SocketFactory extends SocketFactoryHelper {
             });
         }
         return socket;
+    }
+
+    /**
+     * Returns the default SSL config alias so that {@code Plugin_impl} can register the
+     * {@code ssliop} corbaloc protocol, enabling direct SSL bootstrap lookups via
+     * {@code corbaname:ssliop:host:port#name} without a prior plain-IIOP connection.
+     */
+    @Override
+    public String getDefaultSslConfigName() {
+        try {
+            return sslConfig.getSSLAlias();
+        } catch (Exception e) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
+                Tr.debug(tc, "getDefaultSslConfigName: could not determine default SSL alias", e);
+            return null;
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class WSClassRegistration {
     private enum MyLocalFactory implements LocalFactory {
         INSTANCE;
         public Class<?> forName(String name) throws ClassNotFoundException {
-            return Class.forName(name);
+            return Class.forName(name, false, WSClassRegistration.class.getClassLoader());
         }
         @SuppressWarnings({ "rawtypes", "deprecation" })
         public Object newInstance(Class cls) throws InstantiationException, IllegalAccessException {

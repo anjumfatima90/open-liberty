@@ -178,7 +178,17 @@ public class CSIv2SubsystemFactory extends AbstractCsiv2SubsystemFactory impleme
             sb.append(" --port ").append(port);
         }
         if (sslAliasName != null && sslAliasName.trim().isEmpty() == false) {
-            sb.append(" --no-profile --sslConfigName ").append(sslAliasName);
+            // Do NOT pass --no-profile here. When plain IIOP is disabled (iiopPort=-1),
+            // --no-profile suppresses all IIOP profiles from the IOR, leaving zero profiles.
+            // A zero-profile IOR cannot be annotated by the CSIv2 IOR interceptor with
+            // TAG_CSI_SEC_MECH_LIST, so LOCATION_FORWARD replies contain an empty IOR and
+            // clients get TRANSIENT: no usable profile.
+            //
+            // Instead, let Yoko create a normal port=0 IIOP profile (the ZeroPortPolicy from
+            // SSLSubsystemFactory already stamps the port to 0 at the IOR level). That profile
+            // exists in the IOR and the CSIv2 interceptor can annotate it with the SSL transport
+            // addresses via TAG_CSI_SEC_MECH_LIST, making corbaname:ssliop: lookups work.
+            sb.append(" --sslConfigName ").append(sslAliasName);
         }
         sb.append(" --soReuseAddr ").append(soReuseAddr);
         sb.append(",");

@@ -1,0 +1,6 @@
+io.openliberty.test.yoko:yoko-core:0.0.0
+io.openliberty.test.yoko:yoko-osgi:0.0.0
+io.openliberty.test.yoko:yoko-rmi-impl:0.0.0
+io.openliberty.test.yoko:yoko-rmi-spec:0.0.0
+io.openliberty.test.yoko:yoko-spec-corba:0.0.0
+io.openliberty.test.yoko:yoko-util:0.0.0

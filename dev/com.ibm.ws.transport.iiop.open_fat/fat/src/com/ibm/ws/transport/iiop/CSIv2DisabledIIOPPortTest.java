@@ -12,6 +12,13 @@
  */
 package com.ibm.ws.transport.iiop;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -50,14 +57,35 @@ public class CSIv2DisabledIIOPPortTest extends FATServletClient {
     @TestServlet(servlet = CSIv2DisabledIIOPServlet.class, contextRoot = "test.corba.remote")
     public static LibertyServer clientServer;
 
+    /** Yoko trace line written each time an IIOP acceptor (listening socket) is opened. */
+    private static final String ACCEPTOR_CREATED = "Acceptor created using socket";
+
     @BeforeClass
     public static void beforeClass() throws Exception {
         // Deploy the EJB app to the SSL-only server
         ShrinkHelper.exportDropinAppToServer(ejbServer, FATSuite.TEST_CORBA_EAR);
         ejbServer.startServer();
 
+        // With iiopPort="-1" the EJB server must open exactly one acceptor, and it must be
+        // the SSL one on iiopsPort. Check this now, before the client server is started,
+        // because later traffic can legitimately cause further (non-endpoint) ORB acceptors
+        // to be logged in the same trace file.
+        assertNotNull("Expected Yoko to log '" + ACCEPTOR_CREATED + "' for the SSL acceptor",
+                      ejbServer.waitForStringInTrace(ACCEPTOR_CREATED));
+        List<String> acceptors = ejbServer.findStringsInTrace(ACCEPTOR_CREATED);
+        assertEquals("Exactly one IIOP acceptor must be created when iiopPort=-1: " + acceptors,
+                     1, acceptors.size());
+        final String sslPort = System.getProperty("IIOP.secondary.secure", "2820");
+        String acceptor = acceptors.get(0);
+        assertTrue("The only acceptor must be an SSL acceptor: " + acceptor, acceptor.contains("[SSL:"));
+        assertTrue("The only acceptor must listen on iiopsPort " + sslPort + ": " + acceptor,
+                   acceptor.contains("localport=" + sslPort + "]"));
+
+        // Tell the client servlet which iiopsPort the IOR is expected to advertise
+        clientServer.setJvmOptions(Collections.singletonMap(
+                "-D" + CSIv2DisabledIIOPServlet.SSL_PORT_PROPERTY, sslPort));
+
         // Deploy the client WAR and start the client server
-        // (no port injection needed: the iiopsPort is fixed and known at config time)
         ShrinkHelper.exportDropinAppToServer(clientServer, FATSuite.TEST_CORBA_REMOTE_WAR);
         clientServer.startServer();
     }

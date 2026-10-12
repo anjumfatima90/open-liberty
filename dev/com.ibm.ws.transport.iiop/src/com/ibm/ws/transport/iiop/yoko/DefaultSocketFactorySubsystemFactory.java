@@ -35,7 +35,7 @@ public class DefaultSocketFactorySubsystemFactory implements SubsystemFactory {
     private static enum MyLocalFactory implements LocalFactory {
         INSTANCE;
         public Class<?> forName(String name) throws ClassNotFoundException {
-            return Class.forName(name);
+            return Class.forName(name, false, DefaultSocketFactorySubsystemFactory.class.getClassLoader());
         }
         @SuppressWarnings("rawtypes")
         public Object newInstance(Class cls) throws InstantiationException, IllegalAccessException {

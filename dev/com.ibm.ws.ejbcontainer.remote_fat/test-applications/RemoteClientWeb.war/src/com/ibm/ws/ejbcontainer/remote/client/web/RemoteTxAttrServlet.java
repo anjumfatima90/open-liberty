@@ -72,7 +72,7 @@ public class RemoteTxAttrServlet extends FATServlet {
     // Name of module... for lookup.
     private static final String CorbaName = "corbaname::localhost:" + IIOPPort;
     private static final String CorbaNameNS = CorbaName + "/NameService";
-    private static final String CorbaNameSecure = "corbaname::localhost:" + IIOPSecurePort;
+    private static final String CorbaNameSecure = "corbaname:ssliop:localhost:" + IIOPSecurePort;
     private static final String App = "RemoteServerApp";
     private static final String Module = "RemoteServerEJB";
     private static final String TxAttrBean = "TxAttrBean";
@@ -325,14 +325,14 @@ public class RemoteTxAttrServlet extends FATServlet {
     public void testDefaultContextLookupWithSecurePort() throws Exception {
         // first, lookup the bean using default context with corbaname with iiop port.
         // this is required or use of the secure port below will fail.
-        String jndiName = CorbaName + "#" + TxAttrBeanJndi + "!" + TxAttrRemote.class.getName();
-        TxAttrRemote bean = lookupRemoteBean(getDefaultContext(), jndiName, TxAttrRemote.class);
-        assertNotNull("Remote bean is null", bean);
+//        String jndiName = CorbaName + "#" + TxAttrBeanJndi + "!" + TxAttrRemote.class.getName();
+//        TxAttrRemote bean = lookupRemoteBean(getDefaultContext(), jndiName, TxAttrRemote.class);
+//        assertNotNull("Remote bean is null", bean);
 
         // lookup the bean using default context with corbaname on secure IIOP port
         // Note: not a supported scenario; likely to fail in the future.
-        jndiName = CorbaNameSecure + "#" + TxAttrBeanJndi + "!" + TxAttrRemote.class.getName();
-        bean = lookupRemoteBean(getDefaultContext(), jndiName, TxAttrRemote.class);
+        String jndiName = CorbaNameSecure + "#" + TxAttrBeanJndi + "!" + TxAttrRemote.class.getName();
+        TxAttrRemote bean = lookupRemoteBean(getDefaultContext(), jndiName, TxAttrRemote.class);
         assertNotNull("Remote bean is null", bean);
 
         // verify the bean works
