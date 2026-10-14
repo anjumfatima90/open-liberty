@@ -19,7 +19,7 @@
         iiopsPort.
     -->
     <orb id="defaultOrb"
-         nameService="corbaname:ssliop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService">
+         nameService="corbaname:iiops:localhost:${bvt.prop.IIOP.secondary.secure}/NameService">
         <clientPolicy.clientContainerCsiv2>
             <layers>
                 <!-- GSSUP is the default mechanism and needs credentials; these match the

@@ -145,11 +145,15 @@ public abstract class AbstractCsiv2SubsystemFactory implements SubsystemFactory 
         // policy), ConFactory_impl.create_connectors() can call
         // connectionHelper.getEndpoints() to extract the SSL TransportAddresses.
         // Without this, ClientManager.getClientProfilePairs() finds no usable
-        // profile and throws TRANSIENT, causing corbaname:ssliop: lookups to fail.
-        if (!args.contains(IIOP_CONNECTION_HELPER)) {
-            args.add(IIOP_CONNECTION_HELPER);
-            args.add(SocketFactory.class.getName());
-        }
+        // profile and throws TRANSIENT, causing corbaname:iiops: lookups to fail.
+
+        // DefaultSocketFactorySubsystemFactory (ranking=1) is lower than this factory
+        // (ranking=3) so DS always injects it first. It will have already added
+        // DefaultSocketFactory by the time we run. We append unconditionally so that
+        // Yoko's last-assignment-wins arg parsing picks SocketFactory over
+        // DefaultSocketFactory regardless of what any lower-ranked factory inserted.
+        args.add(IIOP_CONNECTION_HELPER);
+        args.add(SocketFactory.class.getName());
     }
 
     @Override

@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.Objects;
 
 import javax.annotation.Resource;
+import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
 import javax.rmi.CORBA.Stub;
 import javax.servlet.annotation.WebServlet;
 
@@ -37,7 +39,7 @@ import shared.TestRemote;
  * iiopsPort. This servlet's ORB is pre-configured in server.xml to bootstrap
  * the CosNaming service over SSL:
  *
- *   &lt;orb nameService="corbaname:ssliop:localhost:${bvt.prop.IIOP.secondary.secure}/NameService"/&gt;
+ *   &lt;orb nameService="corbaname:iiops:localhost:${bvt.prop.IIOP.secondary.secure}/NameService"/&gt;
  *
  * This proves that a remote CSIv2-capable client can reach an EJB published on
  * an SSL-only server (iiopPort=-1).
@@ -50,7 +52,7 @@ import shared.TestRemote;
 public class CSIv2DisabledIIOPServlet extends FATServlet {
 
     /** System property holding the server's iiopsPort; set by CSIv2DisabledIIOPPortTest. */
-    public static final String SSL_PORT_PROPERTY = "csiv2.expected.iiops.port";
+    public static final String SSL_PORT_PROPERTY = "bvt.prop.IIOP.secondary.secure";
 
     @Resource
     private ORB orb;
@@ -90,6 +92,28 @@ public class CSIv2DisabledIIOPServlet extends FATServlet {
         Assert.assertEquals(
                 "Remote invocation of BusinessBean.takesInt() over SSL-only IIOP must return the same value",
                 42, bean.takesInt(42));
+    }
+
+    /**
+     * JNDI lookup over SSL using a full corbaname URL, without using the injected ORB:
+     *
+     *   corbaname:iiops:localhost:&lt;iiopsPort&gt;#ejb/global/...
+     *
+     * The iiops protocol makes the client connect to the SSL-only port directly, so
+     * no prior plain-IIOP lookup is needed. The resulting bean is then invoked to
+     * prove the full round-trip works over TLS.
+     */
+    @Test
+    public void testSslEjbJndiLookup() throws Exception {    	
+    	 String sslPort = System.getProperty(SSL_PORT_PROPERTY);       
+         String jndiName = "corbaname:iiops:localhost:" + sslPort
+                                + "#ejb/global/test.corba/test.corba.bean/BusinessBean!shared.Business";
+         Object o = new InitialContext().lookup(jndiName);
+         Business bean = (Business) PortableRemoteObject.narrow(o, Business.class);
+         Objects.requireNonNull(bean, "BusinessBean must be found via JNDI corbaname:iiops lookup");
+         Assert.assertEquals(
+                 "Remote invocation of BusinessBean.takesInt() after JNDI lookup over SSL-only IIOP must return the same value",
+                 42, bean.takesInt(42));
     }
 
     /**

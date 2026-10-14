@@ -506,8 +506,8 @@ public class SocketFactory extends SocketFactoryHelper {
 
     /**
      * Returns the default SSL config alias so that {@code Plugin_impl} can register the
-     * {@code ssliop} corbaloc protocol, enabling direct SSL bootstrap lookups via
-     * {@code corbaname:ssliop:host:port#name} without a prior plain-IIOP connection.
+     * {@code iiops} corbaloc protocol, enabling direct SSL bootstrap lookups via
+     * {@code corbaname:iiops:host:port#name} without a prior plain-IIOP connection.
      */
     @Override
     public String getDefaultSslConfigName() {
