@@ -42,7 +42,7 @@ public class AopSpringBootAppTests40 extends AopAbstractTests {
             // for the async dispatch NullPointerException in the web async Spring MVC AOP path.
             // SRVE8046E is expected and is tracked at https://github.com/OpenLiberty/open-liberty/issues/35666.
             // TODO: Remove "SRVE8046E" from stopServer once https://github.com/OpenLiberty/open-liberty/issues/35666 is fixed.
-            stopServer(DO_CLEANUP_APPS, "SRVE8046E");
+            stopServer(DO_CLEANUP_APPS, "SRVE8046E", "SRVE0293E");
         } else {
             // Synchronous test uses /service-sync endpoint; SRVE8046E must not appear.
             stopServer(DO_CLEANUP_APPS);
@@ -58,7 +58,8 @@ public class AopSpringBootAppTests40 extends AopAbstractTests {
     // See https://github.com/OpenLiberty/open-liberty/issues/35666
     @Test
     public void testAopSpringBootApplicationServlet61Aysnc() throws Exception {
-        testAopAsync();
+        testAopSpringBootAsync();
         assertNotNull("No NullPointerException on AsyncContext dispatch found.", server.waitForStringInLog("SRVE8046E"));
+        assertNotNull("No NullPointerException on AsyncContext dispatch found.", server.waitForStringInLog("SRVE0293E"));
     }
 }

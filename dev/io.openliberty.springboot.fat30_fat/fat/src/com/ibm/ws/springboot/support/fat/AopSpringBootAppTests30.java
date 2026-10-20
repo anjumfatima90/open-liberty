@@ -48,6 +48,6 @@ public class AopSpringBootAppTests30 extends AopAbstractTests {
 
     @Test
     public void testAopSpringBootApplicationServlet60Aysnc() throws Exception {
-        testAopAsync();
+        testAopAsync60();
     }
 }

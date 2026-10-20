@@ -73,12 +73,25 @@ public abstract class AopAbstractTests extends AbstractSpringTests {
                       server.waitForStringInLogUsingLastOffset("After external service method execution"));
     }
 
+    protected void testAopAsync60() throws Exception {
+        HttpUtils.findStringInUrl(server, getContextRoot() + "service", "Spring Boot AOP Service");
+        HttpUtils.findStringInUrl(server, getContextRoot() + "service?value=test%2Ftest", "Spring Boot AOP Service");
+        HttpUtils.findStringInUrl(server, getContextRoot() + "service?value=test%5Ctest", "Spring Boot AOP Service");
+        assertNotNull("Did not find message printed during execution of external service", server.waitForStringInLogUsingLastOffset("External Service method execution"));
+        //This gets printed when LTW (LoadTimeWeaving) intercepts the call to the internal method. This explicitly requires LTW because Spring AOP does not intercept internal method calls.
+        assertNotNull("Did not find message printed by AOP before execution of internal service",
+                      server.waitForStringInLogUsingLastOffset("Before internal service method execution"));
+        assertNotNull("Did not find message printed during execution of internal service", server.waitForStringInLogUsingLastOffset("Internal Service method execution"));
+        assertNotNull("Did not find message printed after execution of external service",
+                      server.waitForStringInLogUsingLastOffset("After external service method execution"));
+    }
+
     // Exercises the async /service endpoint (WebAsyncTask). When running with servlet-6.1,
     // SRVE8046E is expected in the server logs due to the known bug tracked at
     // https://github.com/OpenLiberty/open-liberty/issues/35666. Each concrete subclass declares
     // SRVE8046E as expected in its @After stopServerAfterTest() so the JUnit report treats it
     // correctly. SRVE8046E does NOT apply to the servlet-6.0 case.
-    protected void testAopAsync() throws Exception {
+    protected void testAopAsync61() throws Exception {
         HttpUtils.findStringInUrl(server, getContextRoot() + "service", "Spring Boot AOP Service");
         // When running with servlet-6.1, the async dispatch NullPointerException (SRVE8046E) causes
         // Liberty to return HTTP 500 for the encoded-character variants. Expect 500 explicitly so the
