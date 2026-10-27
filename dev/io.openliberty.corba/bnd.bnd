@@ -33,3 +33,5 @@ instrument.disabled: true
 -buildpath: \
   io.openliberty.yoko.rmi.spec;version=latest, \
   io.openliberty.yoko.spec.corba;version=latest  
+  
+-fixupmessages.missingexport: "Used bundle version * for exported package";is:=ignore

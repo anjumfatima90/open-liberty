@@ -44,8 +44,6 @@ import shared.TestRemote;
  * This proves that a remote CSIv2-capable client can reach an EJB published on
  * an SSL-only server (iiopPort=-1).
  *
- * The expected iiopsPort is passed in by the FAT test class as the system property
- * {@value #SSL_PORT_PROPERTY} (set through the client server's jvm.options).
  */
 @WebServlet("/CSIv2DisabledIIOPServlet")
 @SuppressWarnings("serial")

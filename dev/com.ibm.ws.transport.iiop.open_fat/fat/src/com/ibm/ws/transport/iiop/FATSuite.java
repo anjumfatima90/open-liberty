@@ -41,7 +41,9 @@ import junit.framework.AssertionFailedError;
 //    IIOPClientServletTest.class,
 //    IORTest.class,
     RemoteEphemeralIIOPPortTest.class,
-    CSIv2DisabledIIOPPortTest.class    
+    CSIv2DisabledIIOPPortTest.class,
+    CSIv2NoIIOPPortTest.class,
+    CSIv2BothPortsTest.class
 })
 public class FATSuite {
     private static final JavaArchive INTERFACES_JAR;
